@@ -1,7 +1,7 @@
 // components/features/TeacherCard/TeacherCard.tsx
 import { useState } from 'react';
-import { useAuth } from '../../../context/AuthContext';
-import { Teacher } from '../../../types';
+import { useAuth } from '../../context/AuthContext';
+import { Teacher }  from '../../types';
 import styles from './TeacherCard.module.css';
 
 interface TeacherCardProps {
@@ -15,12 +15,12 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({ teacher }) => {
 
   const handleFavoriteClick = () => {
     if (!user) {
-      // TODO: Показать модальное окно для неавторизованных
+     
       return;
     }
     
     setIsFavorite(!isFavorite);
-    // TODO: Логика добавления/удаления из избранного
+    
   };
 
   return (

@@ -1,6 +1,6 @@
-// components/layout/Header/Header.tsx
-import { useAuth } from '../../context/AuthContext';
+import {useAuth} from '../../context/AuthContext';
 import styles from './Header.module.css';
+
 
 export const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -16,21 +16,17 @@ export const Header: React.FC = () => {
             <a href="/favorites" className={styles.navLink}>Favorites</a>
           )}
         </nav>
-        <div className={styles.authSection}>
-          {user ? (
-            <div className={styles.userInfo}>
-              <span>Welcome, {user.email}</span>
-              <button onClick={logout} className={styles.logoutBtn}>
-                Logout
-              </button>
-            </div>
-          ) : (
-            <button className={styles.loginBtn}>
-              Login
-            </button>
-          )}
-        </div>
+          <div className={styles.authSection}>
+            {user ? (
+              <div className={styles.userInfo}>
+                <span>Welcome, {user.email}</span>
+                <button onClick={logout} className={styles.logoutBtn}>Logout</button>
+              </div>
+            ) : (
+              <button className={styles.loginBtn}>Login</button>
+            )}
+          </div>
       </div>
     </header>
-  );
-};
+  )
+}
