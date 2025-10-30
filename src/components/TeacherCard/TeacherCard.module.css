@@ -1,0 +1,141 @@
+.card {
+    border: 1px solid #e1e5e9;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  .imageContainer {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  
+  .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #f0f0f0;
+  }
+  
+  .favoriteBtn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .favoriteBtn:hover {
+    background: #f8f9fa;
+  }
+  
+  .favoriteBtn.favorite {
+    background: #ff4757;
+    color: white;
+    border-color: #ff4757;
+  }
+  
+  .name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2d3436;
+  }
+  
+  .languages,
+  .price,
+  .rating,
+  .lessons {
+    margin-bottom: 6px;
+    color: #636e72;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  
+  .readMoreBtn,
+  .trialBtn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .readMoreBtn {
+    background: #f8f9fa;
+    color: #2d3436;
+    border: 1px solid #ddd;
+  }
+  
+  .readMoreBtn:hover {
+    background: #e9ecef;
+  }
+  
+  .trialBtn {
+    background: #0984e3;
+    color: white;
+  }
+  
+  .trialBtn:hover {
+    background: #0770c4;
+  }
+  
+  .details {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e1e5e9;
+  }
+  
+  .experience {
+    line-height: 1.6;
+    color: #2d3436;
+    margin-bottom: 16px;
+  }
+  
+  .conditions {
+    margin-bottom: 16px;
+  }
+  
+  .conditions ul {
+    margin: 8px 0;
+    padding-left: 20px;
+  }
+  
+  .conditions li {
+    margin-bottom: 4px;
+    color: #636e72;
+  }
+  
+  .reviews h4 {
+    margin-bottom: 12px;
+    color: #2d3436;
+  }
+  
+  .review {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    border-left: 3px solid #0984e3;
+  }

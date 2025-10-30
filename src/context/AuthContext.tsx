@@ -7,12 +7,14 @@ import {
     signOut,
     onAuthStateChanged
 } from 'firebase/auth';
+import {singUp as apiSignUp, login as apiLogin, logout as apiLogout} from '../api/authApi';
+
 
 interface AuthContextType {
     user: User | null;
-    signUp: (email: string, password: string) => Promise<void>;
-    login: (email: string, password: string) => Promise<void>;
-    logout: () => Promise<void>;
+    signUp: (email: string, password: string, displayName?: string) => Promise<{success: boolean; error?: string}>;
+    login: (email: string, password: string) => Promise<{success: boolean; error?: string}>;
+    logout: () => Promise<{success: boolean; error?: string}>;
     loading: boolean;
 }
 
@@ -22,17 +24,29 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
-    const signUp = async (email: string, password: string) => {
-        await createUserWithEmailAndPassword(auth, email, password);
+    const signUp = async (email: string, password: string, displayName?: string) => {
+        const result = await apiSignUp(email, password, displayName);
+        if (result.success) {
+            setUser(result.user || null);
+        };
+        return result;
 
     };
 
     const login = async (email: string, password: string) => {
-        await signInWithEmailAndPassword(auth, email, password);
+       const result = await apiLogin(email, password);
+       if (result.success) {
+        setUser(result.user || null);
+       }
+       return result;
     };
 
     const logout = async () => {
-        await signOut(auth);
+        const result = await apiLogout();
+        if (result.success) {
+            setUser(null);
+        }
+        return result;
     }
 
     useEffect(() => {
