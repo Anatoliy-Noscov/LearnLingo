@@ -1,0 +1,86 @@
+.container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); ;
+}
+
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 80px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: white;
+}
+
+.heroContent {
+    flex: 1;
+    max-width: 600px;
+}
+
+.heroTitle {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.heroDescription {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.ctaButton {
+    display: inline-block;
+    background: #ff6b6b;
+    color: white;
+    padding: 12px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.ctaButton:hover {
+    background: #ff5252;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+}
+
+.heroImage {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.placeholderImage {
+    font-size: 8rem;
+    opacity: 0.8;
+}
+
+.features {
+    padding: 80px 20px;
+    background: white;
+}
+
+.featuresTitle {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: #2d3436;
+}
+
+.featuresGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
