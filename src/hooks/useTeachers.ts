@@ -1,5 +1,5 @@
 import {useState, useEffect, useCallback} from 'react';
-import {Teacher} from '../types';
+import { Teacher } from '../types';
 import { getTeachers} from '../api/teachersApi';
 
 
@@ -56,6 +56,12 @@ export const useTeachers = () => {
         loadTeachers(currentPage + 1);
     }, [currentPage, loadTeachers]);
 
+    const applyFilters = useCallback((newFilters: Filters) => {
+        setFilters(newFilters);
+        setCurrentPage(0);
+        setHasMore(true);
+    }, []);
+
     useEffect(() => {
         loadTeachers(0);
     }, []);
@@ -66,7 +72,7 @@ export const useTeachers = () => {
         error,
         hasMore,
         filters,
-        setFilters,
+        setFilters: applyFilters,
         loadMoreTeachers,
     };
 
