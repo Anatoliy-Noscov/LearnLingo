@@ -3,7 +3,7 @@ import styles from './Loader.module.css';
 
 interface LoaderProps {
     size?: 'small' | 'medium' | 'large';
-    color?: 'string';
+    color?: '#0984e3';
     text?: string;
 }
 
@@ -18,7 +18,7 @@ export const Loader: React.FC<LoaderProps> = ({
                 return '40px';
             case 'large':
                 return '80px';
-            case 'medium':    
+            case 'medium':
             default: 
             return '60px';
         }
@@ -42,5 +42,4 @@ export const Loader: React.FC<LoaderProps> = ({
 
     )
 }
-
 export default Loader;

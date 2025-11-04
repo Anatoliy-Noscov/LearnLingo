@@ -4,7 +4,8 @@ import { Filter } from "../../components/Filter/Filter";
 import { Loader } from "../../components/Loader/Loader"
 import { useTeachers} from "../../hooks/useTeachers";
 import { Teacher } from "../../types";
-import styles from "./Teachers.module.css"
+import styles from "./Teachers.module.css";
+import { getLoaderConfig, getLoaderContainerStyles } from '../../utils/helpers';
 
 
 export const Teachers: React.FC = () => {
@@ -53,12 +54,16 @@ export const Teachers: React.FC = () => {
 
     if (loading && teachers.length === 0) {
         return (
-            <div className={styles.loadingContainer}>
-                <Loader />
-                <p>Loading teachers...</p>
-            </div>
-        )
-    }
+          <div className={styles.loadingContainer}>
+            <Loader 
+              size="large" 
+              color="#0984e3"
+              text="Loading teachers..."
+            />
+          </div>
+        );
+      }
+      
 
     if (error) {
         return (
@@ -119,10 +124,18 @@ export const Teachers: React.FC = () => {
             {/*Показываем если есть  еще данные для загрузки */}
             {hasMore && (
                 <div className={styles.loadMoreContainer}>
+
                  <button onClick={handleLoadMore}
                  disabled={loading}
                  className={styles.loadMoreButton}>
-                    {loading ? "Loading..." : "Load More"}
+
+                    {loading ? (
+                        <div style={{display: 'flex', alignItems: 'center', gap: 8px}}>
+                            Loading...
+                        </div>
+                    ) : (
+                        'Load More'
+                    )}
 
                  </button>
                 </div>
