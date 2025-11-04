@@ -78,11 +78,74 @@ export const Filter: React.FC<FilterProps> = ({filters, onFilterChange }) => {
                 <div className={styles.filterGrid}>
                     {/*Фильтр по языку */}
 
-                    
-                </div>
+                    <div className={styles.filterGroup}>
+                        <label htmlFor="language-filter" className={styles.filterLabel}>
+                            Language
+                        </label>
+                        <select 
+                        id="language-filter"
+                        value={handleLanguageChange}
+                        onChange={handleLanguageChange}
+                        className={styles.filterSelect}
+                        >
+                            {/* Первая опция - пустая, означает "любой язык" */}
+                        <option value="">Any language</option>
+                        {/* Генерируем опции для каждого языка из массива */}
+                        {languages.map(language => (
+                            <option value={language} key={language}>{language}</option>
+                        ))}
+                        </select>
+                    </div>
 
+
+                        {/*Filtr or level nolege */}
+                        <div className={styles.filterGroup}>
+                            <label htmlFor="level-filter" className={styles.filterLabel}>Level</label>
+                            <select  
+                            id=""
+                            value={filters.level}
+                            onChange={handleLevelChange}
+                            className={styles.filterSelect}>
+                                <option value="">Any level</option>
+                                {levels.map(level => (
+                                    <option key={level} value={level}>
+                                        {level}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        {/** Filtr on price */}
+
+                        <div className={styles.filterGroup}>
+                            <label htmlFor="price-filter" className={styles.filterLabel}>Price per hour</label>
+                            <select 
+                            id="price-filter"
+                            value={filters.price}
+                            onChange={handlePriceChange}
+                            className={styles.filterSelect}
+                            >
+                                {priceRanges.map(range => (
+                                    <option key={range.value} value={range.value}>
+                                        {range.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/**Кнопка сброса фильтром - показываем только если есть активные фильтры */}
+                        {hasActiveFilters && (
+                            <div className={styles.filterGroup}>
+                                {/* Пустой label для выравнивания с другими фильтрами */}
+                            <label className={styles.filterLabel}>&nbsp;</label>
+                            <button
+                            onClick={handleResetFilters}
+                            className={styles.resetButton}
+                            type='button'>Reset Filters</button>
+                            </div>
+                        )}
+                </div>
             </div>
         )
+};
 
-
-}
+export default Filter;
