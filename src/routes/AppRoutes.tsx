@@ -6,9 +6,9 @@ import {Favorites} from '../pages/Favorites/Favorites';
 export const AppRoutes = () => {
     return (
         <Routes>
-            <Route path="/"/>
+            <Route path="/" element={<Home />}/>
             <Route path="/teachers" element={<Teachers />}/>
-            <Route path="/" element={<Favorites />}/>
+            <Route path="/favorites" element={<Favorites />}/>
         </Routes>
     )
 }

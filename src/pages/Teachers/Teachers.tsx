@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { TeacherCard } from "../../components/Filter/Filter";
+import { TeacherCard } from "../../components/TeacherCard/TeacherCard";
 import { Filter } from "../../components/Filter/Filter";
 import { Loader } from "../../components/Loader/Loader"
 import { useTeachers} from "../../hooks/useTeachers";
 import { Teacher } from "../../types";
 import styles from "./Teachers.module.css";
-import { getLoaderConfig, getLoaderContainerStyles } from '../../utils/helpers';
 
 
 export const Teachers: React.FC = () => {
@@ -32,8 +31,7 @@ export const Teachers: React.FC = () => {
         }
         
         if ( filters.level) {
-            result = result.filter(teacher => teacher.levels.includes(filters.level)
-        );
+            result = result.filter(teacher => teacher.levels.includes(filters.level));
         }
 
         if (filters.price) {
@@ -92,7 +90,7 @@ export const Teachers: React.FC = () => {
             {/*Контент фильтрации */}
             {/*Передаем текущие фильтры и функции для их обновления */}
             <Filter
-            filter={filters}
+            filters={filters}
             onFilterChange={handleFilterChange} />
 
             {/*Секция с результатами */}
@@ -109,7 +107,12 @@ export const Teachers: React.FC = () => {
                 {/*Рендерим каждого преподавателя используя TeacherCard */}
                 {/*Важно передать key - React использует его для оптимизации обновлений */}
                 {filteredTeachers.map(teacher => (
-                    <TeacherCard key={teacher.id} teacher={teacher} />
+                    <TeacherCard 
+                    key={teacher.id} 
+                    teacher={teacher}
+                    onFavoriteToggle={(teacherId, isFavorite) => {
+                        console.log(`Teacher ${teacherId} ${isFavorite ? 'added to' : 'removed from'} favorites`);
+                    }} />
                 ))}
                 </div>
             {/* Сообщение если нет результатов */}
@@ -125,17 +128,12 @@ export const Teachers: React.FC = () => {
             {hasMore && (
                 <div className={styles.loadMoreContainer}>
 
-                 <button onClick={handleLoadMore}
+                 <button 
+                 onClick={handleLoadMore}
                  disabled={loading}
                  className={styles.loadMoreButton}>
 
-                    {loading ? (
-                        <div style={{display: 'flex', alignItems: 'center', gap: 8px}}>
-                            Loading...
-                        </div>
-                    ) : (
-                        'Load More'
-                    )}
+                    {loading ? 'Loading...' :  'Load More'}
 
                  </button>
                 </div>

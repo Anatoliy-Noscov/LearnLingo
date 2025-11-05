@@ -3,7 +3,7 @@ import styles from './Loader.module.css';
 
 interface LoaderProps {
     size?: 'small' | 'medium' | 'large';
-    color?: '#0984e3';
+    color?: 'string';
     text?: string;
 }
 

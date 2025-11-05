@@ -7,7 +7,7 @@ import {
     signOut,
     onAuthStateChanged
 } from 'firebase/auth';
-import {singUp as apiSignUp, login as apiLogin, logout as apiLogout} from '../api/authApi';
+import {signUp as apiSignUp, login as apiLogin, logout as apiLogout} from '../api/authApi';
 
 
 interface AuthContextType {

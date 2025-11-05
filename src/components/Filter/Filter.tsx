@@ -84,7 +84,7 @@ export const Filter: React.FC<FilterProps> = ({filters, onFilterChange }) => {
                         </label>
                         <select 
                         id="language-filter"
-                        value={handleLanguageChange}
+                        value={filters.language}
                         onChange={handleLanguageChange}
                         className={styles.filterSelect}
                         >
@@ -102,7 +102,7 @@ export const Filter: React.FC<FilterProps> = ({filters, onFilterChange }) => {
                         <div className={styles.filterGroup}>
                             <label htmlFor="level-filter" className={styles.filterLabel}>Level</label>
                             <select  
-                            id=""
+                            id="level-filter"
                             value={filters.level}
                             onChange={handleLevelChange}
                             className={styles.filterSelect}>

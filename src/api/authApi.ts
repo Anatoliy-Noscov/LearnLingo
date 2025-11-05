@@ -10,7 +10,7 @@ import {
   export interface AuthResponse {
     success: boolean;
     user?: UserCredential['user'];
-    error?; string;
+    error?: string;
   }
 
   export const signUp = async (email: string, password: string, displayName?: string): Promise<AuthResponse> => {
@@ -47,7 +47,7 @@ import {
         return {
             success: false, 
             error: error.message
-        }
+        };
     }
   }
 
