@@ -1,3 +1,5 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {useAuth} from '../../context/AuthContext';
 import styles from './Header.module.css';
 
@@ -8,14 +10,18 @@ export const Header: React.FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <h1 className={styles.logo}>Learn Lingo</h1>
+
+        <Link to="/" className={styles.logo}>Learn Lingo</Link>
+
         <nav className={styles.nav}>
-          <a href="/" className={styles.navLink}>Home</a>
-          <a href="/teachers" className={styles.navLink}>Teachers</a>
+
+          <Link to="/" className={styles.navLink}>Home</Link>
+          <Link to="/teachers" className={styles.navLink}>Teachers</Link>
           {user && (
-            <a href="/favorites" className={styles.navLink}>Favorites</a>
+            <Link to="/favorites" className={styles.navLink}>Favorites</Link>
           )}
         </nav>
+        
           <div className={styles.authSection}>
             {user ? (
               <div className={styles.userInfo}>
