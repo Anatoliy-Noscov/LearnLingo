@@ -1,6 +1,7 @@
 // Импорты: все необходимое для работы карточки преподавателя
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useFavorites } from '../../hooks/Favorites';
 import { Teacher } from '../../types';
 import styles from './TeacherCard.module.css';
 
@@ -17,9 +18,9 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
 }) => {
   // Используем хук аутентификации для проверки авторизации пользователя
   const { user } = useAuth();
+
+  const {isFavorite, toggleFavorite, loading: favoritesLoading} = useFavorites();
   
-  // Состояние для отслеживания добавления в избранное
-  const [isFavorite, setIsFavorite] = useState<boolean>(false);
   
   // Состояние для управления отображением детальной информации
   const [showDetails, setShowDetails] = useState<boolean>(false);
@@ -27,51 +28,28 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
   // Состояние для управления модальным окном бронирования
   const [showBookingModal, setShowBookingModal] = useState<boolean>(false);
 
-  // Эффект для загрузки состояния избранного из localStorage при монтировании компонента
-  // useEffect с пустым массивом зависимостей = componentDidMount
-  useEffect(() => {
-    if (!user || !teacher.id) return;
     
-    // Загружаем избранное из localStorage
-    // В реальном приложении это могло бы быть из базы данных
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    const isTeacherFavorite = favorites.includes(teacher.id);
-    setIsFavorite(isTeacherFavorite);
-  }, [user, teacher.id]); // Зависимости: эффект сработает при изменении user или teacher.id
 
   // Обработчик клика по кнопке "сердца" (избранное)
   const handleFavoriteClick = () => {
     // Если пользователь не авторизован - показываем уведомление
     if (!user) {
-      // TODO: Показать модальное окно с предложением авторизоваться
+      // TODO: Заменить на красный Toast или Modal
       alert('Please log in to add teachers to favorites');
       return;
     }
 
-    // Если teacher.id отсутствует - выходим (защита от ошибок)
-    if (!teacher.id) return;
-
-    // Получаем текущий список избранного из localStorage
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    let newFavorites: string[];
-
-    if (isFavorite) {
-      // Удаляем преподавателя из избранного
-      newFavorites = favorites.filter((id: string) => id !== teacher.id);
-    } else {
-      // Добавляем преподавателя в избранное
-      newFavorites = [...favorites, teacher.id];
+    if (!teacher.id) {
+      console.error("Teacher ID is missing")
+      return;
     }
 
-    // Сохраняем обновленный список в localStorage
-    localStorage.setItem('favorites', JSON.stringify(newFavorites));
-    
-    // Обновляем состояние компонента
-    setIsFavorite(!isFavorite);
+
+    toggleFavorite(teacher.id);
     
     // Вызываем колбэк если он передан (для уведомления родительского компонента)
-    if (onFavoriteToggle) {
-      onFavoriteToggle(teacher.id, !isFavorite);
+    if (onFavoriteToggle && teacher.id) {
+      onFavoriteToggle(teacher.id, !isFavorite(teacher.id));
     }
   };
 
