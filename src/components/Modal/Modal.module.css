@@ -1,0 +1,132 @@
+/* Затемненный фон модалки */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  /* Основное окно модалки */
+  .modal {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s ease-out;
+    overflow: hidden;
+  }
+  
+  /* Размеры модалки */
+  .modal.small {
+    width: 400px;
+  }
+  
+  .modal.medium {
+    width: 500px;
+  }
+  
+  .modal.large {
+    width: 600px;
+  }
+  
+  /* Заголовок модалки */
+  .modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 24px 0;
+    margin-bottom: 16px;
+  }
+  
+  .modalTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3436;
+    margin: 0;
+  }
+  
+  /* Кнопка закрытия */
+  .closeButton {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #636e72;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+  
+  .closeButton:hover {
+    background: #f8f9fa;
+    color: #2d3436;
+  }
+  
+  /* Контент модалки */
+  .modalContent {
+    padding: 0 24px 24px;
+    overflow-y: auto;
+    flex: 1;
+  }
+  
+  /* Анимации */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Адаптивность */
+  @media (max-width: 768px) {
+    .modalOverlay {
+      padding: 10px;
+    }
+    
+    .modal.small,
+    .modal.medium,
+    .modal.large {
+      width: 95vw;
+      max-width: 95vw;
+    }
+    
+    .modalHeader {
+      padding: 16px 16px 0;
+    }
+    
+    .modalContent {
+      padding: 0 16px 16px;
+    }
+    
+    .modalTitle {
+      font-size: 1.3rem;
+    }
+  }
