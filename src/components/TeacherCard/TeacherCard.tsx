@@ -110,13 +110,13 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
             alt={`${teacher.name} ${teacher.surname}`}
             className={styles.avatar}
           />
-          {/* Кнопка избранного с условным классом для активного состояния */}
+          {/* Используем isFavorite из хука для определения состояния */}
           <button 
-            className={`${styles.favoriteButton} ${isFavorite ? styles.favoriteActive : ''}`}
+            className={`${styles.favoriteButton} ${teacher.id && isFavorite(teacher.id) ? styles.favoriteActive : ''}`}
             onClick={handleFavoriteClick}
-            aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            aria-label={teacher.id && isFavorite(teacher.id) ? 'Remove from favorites' : 'Add to favorites'}
           >
-            ♥
+            {favoritesLoading ? '...' : "♥"}
           </button>
         </div>
 
