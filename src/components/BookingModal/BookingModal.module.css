@@ -1,0 +1,198 @@
+.bookingModal {
+    padding: 8px 0;
+  }
+  
+  /* Информация о преподавателе */
+  .teacherInfo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    border-left: 4px solid #0984e3;
+  }
+  
+  .teacherAvatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .teacherDetails h3 {
+    margin: 0 0 4px 0;
+    color: #2d3436;
+    font-size: 1.2rem;
+  }
+  
+  .teacherLanguages {
+    margin: 0 0 4px 0;
+    color: #636e72;
+    font-size: 0.9rem;
+  }
+  
+  .teacherPrice {
+    margin: 0;
+    color: #2d3436;
+    font-size: 0.95rem;
+  }
+  
+  /* Форма бронирования */
+  .bookingForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .formLabel {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2d3436;
+    font-size: 0.95rem;
+  }
+  
+  .formInput,
+  .formSelect,
+  .formTextarea {
+    padding: 12px 16px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: white;
+  }
+  
+  .formInput:focus,
+  .formSelect:focus,
+  .formTextarea:focus {
+    outline: none;
+    border-color: #0984e3;
+    box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+  }
+  
+  .formInput:hover,
+  .formSelect:hover,
+  .formTextarea:hover {
+    border-color: #b2bec3;
+  }
+  
+  /* Стили для ошибок */
+  .inputError {
+    border-color: #d63031 !important;
+    background-color: #fff5f5;
+  }
+  
+  .inputError:focus {
+    border-color: #d63031 !important;
+    box-shadow: 0 0 0 3px rgba(214, 48, 49, 0.1) !important;
+  }
+  
+  .errorMessage {
+    color: #d63031;
+    font-size: 0.85rem;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  
+  /* Текстовое поле */
+  .formTextarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.5;
+  }
+  
+  /* Кнопки действия */
+  .formActions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+  
+  .cancelButton,
+  .submitButton {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+  }
+  
+  .cancelButton {
+    background: #f8f9fa;
+    color: #636e72;
+    border: 1px solid #e1e5e9;
+  }
+  
+  .cancelButton:hover:not(:disabled) {
+    background: #e9ecef;
+    color: #2d3436;
+  }
+  
+  .submitButton {
+    background: #00b894;
+    color: white;
+  }
+  
+  .submitButton:hover:not(:disabled) {
+    background: #00a085;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3);
+  }
+  
+  .cancelButton:disabled,
+  .submitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+  
+  /* Примечание */
+  .bookingNote {
+    padding: 16px;
+    background: #e8f4fd;
+    border-radius: 8px;
+    border-left: 4px solid #0984e3;
+    margin-top: 16px;
+  }
+  
+  .bookingNote p {
+    margin: 0;
+    color: #2d3436;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .bookingNote strong {
+    color: #0984e3;
+  }
+  
+  /* Адаптивность */
+  @media (max-width: 768px) {
+    .teacherInfo {
+      flex-direction: column;
+      text-align: center;
+      gap: 12px;
+    }
+    
+    .formActions {
+      flex-direction: column;
+    }
+    
+    .cancelButton,
+    .submitButton {
+      width: 100%;
+    }
+  }
