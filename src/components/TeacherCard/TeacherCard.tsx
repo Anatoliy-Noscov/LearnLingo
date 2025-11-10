@@ -1,7 +1,8 @@
 // Импорты: все необходимое для работы карточки преподавателя
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useFavorites } from '../../hooks/Favorites';
+import {BookingModal} from '../../components/BookingModal/BookingModal';
 import { Teacher } from '../../types';
 import styles from './TeacherCard.module.css';
 
@@ -68,6 +69,29 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
     setShowBookingModal(true);
   };
 
+  const handleBookingSubmit = async (bookingData: any) => {
+    try {
+      console.log('Booking submitted:', {
+        teacher: teacher.id,
+        teacherName: `${teacher.name} ${teacher.surname}`,
+        ...bookingData
+      });
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      alert(`Booking request sent to ${teacher.name} ${teacher.surname}! They will contact you soon.` );
+    } catch (error) {
+      console.error('Booking error:', error);
+      alert('There was an error submitting your booking. Please try again.');
+      throw error;
+    }
+  }
+
+
+
+
+
+
   // Функция для рендеринга рейтинга в виде звезд
   const renderRatingStars = (rating: number) => {
     const stars = [];
@@ -100,6 +124,7 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
 
   // Основной рендер компонента
   return (
+    <>
     <div className={styles.card}>
       {/* Верхняя часть карточки - аватар и основная информация */}
       <div className={styles.cardHeader}>
@@ -224,13 +249,17 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
       )}
 
       {/* TODO: Модальное окно бронирования урока */}
-      {/* {showBookingModal && (
+      {showBookingModal && (
         <BookingModal 
-          teacher={teacher}
-          onClose={() => setShowBookingModal(false)}
+        isOpen={showBookingModal}
+        onClose={() => setShowBookingModal(false)}
+        teacher={teacher}
+        onBookingSubmit={handleBookingSubmit}
+          
         />
-      )} */}
+      )}
     </div>
+    </>
   );
 };
 
