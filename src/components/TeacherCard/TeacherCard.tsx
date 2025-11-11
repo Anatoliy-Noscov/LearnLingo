@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useFavorites } from '../../hooks/Favorites';
-import { BookingModal } from '../BookingModal/BookingModal'; // Добавляем импорт
-import { Teacher } from '../../types';
+import React, { useState, useCallback, memo } from 'react';
+import { useAuth } from '../../../context/AuthContext';
+import { useFavorites } from '../../../hooks/useFavorites';
+import { BookingModal } from '../BookingModal/BookingModal';
+import { Teacher } from '../../../types';
 import styles from './TeacherCard.module.css';
 
 interface TeacherCardProps {
@@ -10,7 +10,8 @@ interface TeacherCardProps {
   onFavoriteToggle?: (teacherId: string, isFavorite: boolean) => void;
 }
 
-export const TeacherCard: React.FC<TeacherCardProps> = ({ 
+// Оптимизируем компонент с помощью memo чтобы избежать лишних ререндеров
+export const TeacherCard: React.FC<TeacherCardProps> = memo(({ 
   teacher, 
   onFavoriteToggle 
 }) => {
@@ -20,9 +21,10 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
   const [showDetails, setShowDetails] = useState<boolean>(false);
   const [showBookingModal, setShowBookingModal] = useState<boolean>(false);
 
-  // Обработчик клика по кнопке "сердца"
-  const handleFavoriteClick = () => {
+  // Обработчики обернуты в useCallback чтобы сохранять ссылки между рендерами
+  const handleFavoriteClick = useCallback(() => {
     if (!user) {
+      // TODO: Заменить на Toast
       alert('Please log in to add teachers to favorites');
       return;
     }
@@ -37,47 +39,40 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
     if (onFavoriteToggle && teacher.id) {
       onFavoriteToggle(teacher.id, !isFavorite(teacher.id));
     }
-  };
+  }, [user, teacher.id, toggleFavorite, onFavoriteToggle, isFavorite]);
 
-  // Обработчик клика по кнопке "Read more"
-  const handleReadMoreClick = () => {
-    setShowDetails(!showDetails);
-  };
+  const handleReadMoreClick = useCallback(() => {
+    setShowDetails(prev => !prev);
+  }, []);
 
-  // Обработчик клика по кнопке бронирования урока
-  const handleBookLessonClick = () => {
+  const handleBookLessonClick = useCallback(() => {
     if (!user) {
       alert('Please log in to book a lesson');
       return;
     }
     setShowBookingModal(true);
-  };
+  }, [user]);
 
-  // Обработчик отправки формы бронирования
-  const handleBookingSubmit = async (bookingData: any) => {
+  const handleBookingSubmit = useCallback(async (bookingData: any) => {
     try {
-      // Здесь будет логика отправки данных на сервер
       console.log('Booking submitted:', {
         teacher: teacher.id,
         teacherName: `${teacher.name} ${teacher.surname}`,
         ...bookingData
       });
       
-      // Имитация API запроса
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // В реальном приложении здесь был бы вызов API
       alert(`Booking request sent to ${teacher.name} ${teacher.surname}! They will contact you soon.`);
       
     } catch (error) {
       console.error('Booking error:', error);
       alert('There was an error submitting your booking. Please try again.');
-      throw error; // Пробрасываем ошибку чтобы форма знала об неудаче
+      throw error;
     }
-  };
+  }, [teacher.id, teacher.name, teacher.surname]);
 
-  // Функция для рендеринга рейтинга в виде звезд
-  const renderRatingStars = (rating: number) => {
+  // Функция рендеринга звезд также обернута в useCallback
+  const renderRatingStars = useCallback((rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.5;
@@ -101,18 +96,23 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
         <span className={styles.ratingValue}>({rating})</span>
       </div>
     );
-  };
+  }, []);
+
+  // Функция для закрытия модалки
+  const handleCloseBookingModal = useCallback(() => {
+    setShowBookingModal(false);
+  }, []);
 
   return (
     <>
       <div className={styles.card}>
-        {/* Остальная часть карточки без изменений */}
         <div className={styles.cardHeader}>
           <div className={styles.avatarSection}>
             <img 
               src={teacher.avatar_url} 
               alt={`${teacher.name} ${teacher.surname}`}
               className={styles.avatar}
+              loading="lazy" // Ленивая загрузка изображений
             />
             <button 
               className={`${styles.favoriteButton} ${
@@ -223,15 +223,17 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
         )}
       </div>
 
-      {/* Модальное окно бронирования */}
       <BookingModal
         isOpen={showBookingModal}
-        onClose={() => setShowBookingModal(false)}
+        onClose={handleCloseBookingModal}
         teacher={teacher}
         onBookingSubmit={handleBookingSubmit}
       />
     </>
   );
-};
+});
+
+// Отображаем имя компонента в React DevTools
+TeacherCard.displayName = 'TeacherCard';
 
 export default TeacherCard;
