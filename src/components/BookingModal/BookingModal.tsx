@@ -2,8 +2,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Modal } from '../../common/Modal/Modal';
-import { Teacher } from '../../../types';
+import { Modal } from '../../components/Modal/Modal';
+import { Teacher } from '../../types';
 import styles from './BookingModal.module.css';
 
 // Интерфейс для данных формы бронирования

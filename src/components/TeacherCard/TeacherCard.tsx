@@ -1,8 +1,8 @@
 import React, { useState, useCallback, memo } from 'react';
-import { useAuth } from '../../../context/AuthContext';
-import { useFavorites } from '../../../hooks/useFavorites';
+import { useAuth } from '../../context/AuthContext';
+import { useFavorites } from '../../hooks/Favorites';
 import { BookingModal } from '../BookingModal/BookingModal';
-import { Teacher } from '../../../types';
+import { Teacher } from '../../types';
 import styles from './TeacherCard.module.css';
 
 interface TeacherCardProps {
