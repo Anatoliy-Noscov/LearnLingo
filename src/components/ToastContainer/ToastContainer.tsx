@@ -1,5 +1,7 @@
 import React from 'react';
-import { useToast, Toast } from '../../context/ToastContext';
+import { useToast } from '../../context/ToastContext';
+import type { Toast } from '../../context/ToastContext';
+
 import styles from './ToastContainer.module.css';
 
 // Компонент отдельного Toast

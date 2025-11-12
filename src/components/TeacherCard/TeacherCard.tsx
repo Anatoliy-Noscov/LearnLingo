@@ -2,7 +2,7 @@ import React, { useState, useCallback, memo } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useFavorites } from '../../hooks/Favorites';
 import { BookingModal } from '../BookingModal/BookingModal';
-import { Teacher } from '../../types';
+import type { Teacher } from '../../types';
 import styles from './TeacherCard.module.css';
 
 interface TeacherCardProps {
@@ -24,7 +24,6 @@ export const TeacherCard: React.FC<TeacherCardProps> = memo(({
   // Обработчики обернуты в useCallback чтобы сохранять ссылки между рендерами
   const handleFavoriteClick = useCallback(() => {
     if (!user) {
-      // TODO: Заменить на Toast
       alert('Please log in to add teachers to favorites');
       return;
     }

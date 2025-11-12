@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User } from 'firebase/auth';
+import type { User } from 'firebase/auth';
 import { auth } from '../api/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { signUp as apiSignUp, login as apiLogin, logout as apiLogout } from '../api/authApi';
