@@ -52,20 +52,16 @@ export const Modal: React.FC<ModalProps> = ({
     <div className={styles.modalOverlay} onClick={handleBackdropClick}>
       <div className={`${styles.modal} ${styles[size]}`}>
         {/* Заголовок и кнопка закрытия */}
-        {(title || onClose) && (
-          <div className={styles.modalHeader}>
-            {title && <h2 className={styles.modalTitle}>{title}</h2>}
-            {onClose && (
-              <button
-                className={styles.closeButton}
-                onClick={onClose}
-                aria-label="Close modal"
-              >
-                ×
-              </button>
-            )}
-          </div>
-        )}
+        <div className={styles.modalHeader}>
+          {title && <h2 className={styles.modalTitle}>{title}</h2>}
+          <button
+            className={styles.closeButton}
+            onClick={onClose}
+            aria-label="Close modal"
+          >
+            ×
+          </button>
+        </div>
         
         {/* Контент модалки */}
         <div className={styles.modalContent}>
