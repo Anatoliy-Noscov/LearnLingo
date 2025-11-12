@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Modal } from '../../components/Modal/Modal';
-import { Teacher } from '../../types';
+import type { Teacher } from '../../types';
 import styles from './BookingModal.module.css';
 
 // Интерфейс для данных формы бронирования
@@ -49,6 +49,8 @@ const bookingSchema = yup.object({
   message: yup
     .string()
     .max(500, 'Message must not exceed 500 characters')
+    .optional()
+    .default('') // Исправлено: добавляем default значение
 });
 
 export const BookingModal: React.FC<BookingModalProps> = ({
@@ -64,15 +66,14 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     formState: { errors, isSubmitting },
     reset
   } = useForm<BookingFormData>({
-    resolver: yupResolver(bookingSchema),
-    mode: 'onChange' // Валидация при изменении полей
+    resolver: yupResolver(bookingSchema) as any, // Исправлено: явное приведение типа
+    mode: 'onChange'
   });
 
   // Обработчик отправки формы
   const onSubmit = async (data: BookingFormData) => {
     try {
       await onBookingSubmit(data);
-      // Сбрасываем форму после успешной отправки
       reset();
       onClose();
     } catch (error) {
@@ -89,8 +90,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   // Генерируем доступные временные слоты
   const generateTimeSlots = () => {
     const slots = [];
-    const startHour = 9; // 9:00 AM
-    const endHour = 21;  // 9:00 PM
+    const startHour = 9;
+    const endHour = 21;
     
     for (let hour = startHour; hour < endHour; hour++) {
       const timeLabel = hour < 12 ? `${hour}:00 AM` : 
@@ -114,7 +115,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
       size="medium"
     >
       <div className={styles.bookingModal}>
-        {/* Информация о преподавателе */}
         <div className={styles.teacherInfo}>
           <img 
             src={teacher.avatar_url} 
@@ -132,7 +132,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           </div>
         </div>
 
-        {/* Форма бронирования */}
         <form onSubmit={handleSubmit(onSubmit)} className={styles.bookingForm}>
           <div className={styles.formGroup}>
             <label htmlFor="name" className={styles.formLabel}>
@@ -223,7 +222,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             )}
           </div>
 
-          {/* Кнопки действия */}
           <div className={styles.formActions}>
             <button
               type="button"
@@ -242,7 +240,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             </button>
           </div>
 
-          {/* Примечание */}
           <div className={styles.bookingNote}>
             <p>
               <strong>Note:</strong> After booking, the teacher will contact you 
