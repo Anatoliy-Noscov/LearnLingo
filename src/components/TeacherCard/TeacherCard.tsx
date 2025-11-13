@@ -1,5 +1,5 @@
 import React, { useState, useCallback, memo } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import { useFavorites } from '../../hooks/Favorites';
 import { BookingModal } from '../BookingModal/BookingModal';
 import type { Teacher } from '../../types';
