@@ -1,6 +1,6 @@
 import { ref, get, query, limitToFirst, startAt, orderByKey } from 'firebase/database';
 import { database } from './firebase';
-import { Teacher } from '../types';
+import type { Teacher } from '../types';
 
 const TEACHERS_PER_PAGE = 4;
 
