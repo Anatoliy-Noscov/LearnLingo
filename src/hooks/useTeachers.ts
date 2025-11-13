@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Teacher } from '../types';
+import type { Teacher } from '../types';
 import { getTeachers, searchTeachers } from '../api/teachersApi';
 
 export interface Filters {

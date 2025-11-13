@@ -1,18 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
-import {useAuth } from '../components/AuthContext/AuthContext';
-
+import { useAuth } from '../hooks/useAuth'; // Исправлено: правильный путь к хуку
 
 export const useFavorites = () => {
     const { user } = useAuth();
-
 
     const [favorites, setFavorites] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
 
     const getStorageKey = useCallback(() => {
-        return user ? `favorites_${user.id}` : 'favorites_anonymous';
+        return user ? `favorites_${user.uid}` : 'favorites_anonymous';
     }, [user]);
-
 
     useEffect(() => {
         const loadFavorites = () => {
@@ -32,8 +29,6 @@ export const useFavorites = () => {
         loadFavorites();
     }, [getStorageKey]);
 
-
-
     useEffect(() => {
         const handleStorageChange = (event: StorageEvent) => {
             if (event.key === getStorageKey() && event.newValue) {
@@ -49,83 +44,75 @@ export const useFavorites = () => {
 
         return () => {
             window.removeEventListener('storage', handleStorageChange);
-        }
+        };
     }, [getStorageKey]);
 
-     // Добавление преподавателя в избранное
-  const addToFavorites = useCallback((teacherId: string) => {
-    if (!teacherId) return;
+    // Добавление преподавателя в избранное
+    const addToFavorites = useCallback((teacherId: string) => {
+        if (!teacherId) return;
 
-    setFavorites(prev => {
-      const newFavorites = [...prev, teacherId];
-      const storageKey = getStorageKey();
-      
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(newFavorites));
-      } catch (error) {
-        console.error('Error saving favorites:', error);
-      }
-      
-      return newFavorites;
-    });
-  }, [getStorageKey]);
+        setFavorites(prev => {
+            const newFavorites = [...prev, teacherId];
+            const storageKey = getStorageKey();
+            
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(newFavorites));
+            } catch (error) {
+                console.error('Error saving favorites:', error);
+            }
+            
+            return newFavorites;
+        });
+    }, [getStorageKey]);
 
-//удаление преподавателя из избранного
+    // Удаление преподавателя из избранного
+    const removeFromFavorites = useCallback((teacherId: string) => {
+        if (!teacherId) return;
 
-  const removeFromFavorites = useCallback((teacherId: string) => {
-    if (!teacherId) return;
+        setFavorites(prev => {
+            const newFavorites = prev.filter(id => id !== teacherId);
+            const storageKey = getStorageKey();
 
-    setFavorites(prev => {
-        const newFavorites = prev.filter(id => id !== teacherId);
-        const storageKey = getStorageKey();
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(newFavorites));
+            } catch (error) {
+                console.error('Error saving favorites:', error);
+            }
+            return newFavorites;
+        });
+    }, [getStorageKey]);
 
-        try {
-            localStorage.setItem(storageKey, JSON.stringify(newFavorites));
-        } catch (error) {
-            console.error('Error saving favorites:', error);
+    // Переключение состояния избранного
+    const toggleFavorite = useCallback((teacherId: string) => {
+        if (!teacherId) return;
+
+        if (favorites.includes(teacherId)) {
+            removeFromFavorites(teacherId);
+        } else {
+            addToFavorites(teacherId);
         }
-        return newFavorites;
-    });
-  }, [getStorageKey])
+    }, [favorites, addToFavorites, removeFromFavorites]);
 
+    // Проверка является ли преподаватель избранным
+    const isFavorite = useCallback((teacherId: string) => {
+        return favorites.includes(teacherId);
+    }, [favorites]);
 
-  //переключение состояния избранного
+    // Очистка всех избранных
+    const clearFavorites = useCallback(() => {
+        setFavorites([]);
+        const storageKey = getStorageKey();
+        localStorage.removeItem(storageKey);
+    }, [getStorageKey]);
 
-  const toggleFavorite = useCallback((teacherId: string) => {
-    if (!teacherId) return;
-
-    if(favorites.includes(teacherId)) {
-        removeFromFavorites(teacherId);
-    } else {
-        addToFavorites(teacherId);
-    }
-  }, [favorites, addToFavorites, removeFromFavorites]);
-
-
-  //проверка является ли преподаватель избранным
-
-  const isFavorite = useCallback((teacherId: string) => {
-    return favorites.includes(teacherId);
-  }, [favorites]);
-
-  // очистка всех избранных
-
-  const clearFavorites = useCallback(() => {
-    setFavorites([]);
-    const storageKey = getStorageKey();
-    localStorage.removeItem(storageKey);
-
-  }, [getStorageKey]);
-
-  return {
-    favorites,
-    loading,
-    addToFavorites,
-    removeFromFavorites,
-    toggleFavorite,
-    isFavorite,
-    clearFavorites,
-    hasFavorites: favorites.length > 0
-  }
-
-}
+    return {
+        favorites,
+        loading,
+        addToFavorites,
+        removeFromFavorites,
+        toggleFavorite,
+        isFavorite,
+        clearFavorites,
+        hasFavorites: favorites.length > 0
+    };
+};

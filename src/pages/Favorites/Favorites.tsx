@@ -1,5 +1,5 @@
 import React from 'react';
-import {useAuth} from "../../context/AuthContext";
+import {useAuth} from "../../context/AuthProvider";
 import { useFavorites } from '../../hooks/Favorites';
 import { useTeachers } from '../../hooks/useTeachers';
 import { TeacherCard} from '../../components/TeacherCard/TeacherCard';
