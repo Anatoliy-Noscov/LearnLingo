@@ -52,7 +52,14 @@ export const TeacherCard: React.FC<TeacherCardProps> = memo(({
     setShowBookingModal(true);
   }, [user]);
 
-  const handleBookingSubmit = useCallback(async (bookingData: any) => {
+  // Исправлено: правильный тип для bookingData
+  const handleBookingSubmit = useCallback(async (bookingData: {
+    name: string;
+    email: string;
+    phone: string;
+    lessonTime: string;
+    message?: string;
+  }) => {
     try {
       console.log('Booking submitted:', {
         teacher: teacher.id,
