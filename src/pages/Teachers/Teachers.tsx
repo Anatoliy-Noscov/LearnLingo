@@ -3,12 +3,10 @@ import { TeacherCard } from "../../components/TeacherCard/TeacherCard";
 import { Filter } from "../../components/Filter/Filter";
 import { Loader } from "../../components/Loader/Loader"
 import { useTeachers} from "../../hooks/useTeachers";
-import { Teacher } from "../../types";
+import type { Teacher } from "../../types";
 import styles from "./Teachers.module.css";
 
-
 export const Teachers: React.FC = () => {
-
     const {
         teachers,
         loading,
@@ -30,7 +28,7 @@ export const Teachers: React.FC = () => {
             result = result.filter(teacher => teacher.languages.includes(filters.language));
         }
         
-        if ( filters.level) {
+        if (filters.level) {
             result = result.filter(teacher => teacher.levels.includes(filters.level));
         }
 
@@ -41,12 +39,12 @@ export const Teachers: React.FC = () => {
         setFilteredTeachers(result);   
     }, [teachers, filters]);
     
-
     const handleLoadMore = () => {
         loadMoreTeachers();
     };
 
-    const handleFilterChange = (newFilters: any) => {
+    // Исправлено: правильный тип для фильтров
+    const handleFilterChange = (newFilters: { language: string; level: string; price: number }) => {
         setFilters(newFilters);
     };
 
@@ -55,14 +53,12 @@ export const Teachers: React.FC = () => {
           <div className={styles.loadingContainer}>
             <Loader 
               size="large" 
-              color="#0984e3"
               text="Loading teachers..."
             />
           </div>
         );
-      }
+    }
       
-
     if (error) {
         return (
             <div className={styles.errorContainer}>
@@ -75,11 +71,8 @@ export const Teachers: React.FC = () => {
         );
     }
 
-
-
     return (
         <div className={styles.container}>
-            {/*Заголовок страницы */}
             <header className={styles.header}>
                 <h1 className={styles.title}>Our Language Teachers</h1>
                 <p className={styles.subtitle}>
@@ -87,61 +80,52 @@ export const Teachers: React.FC = () => {
                 </p>
             </header>
 
-            {/*Контент фильтрации */}
-            {/*Передаем текущие фильтры и функции для их обновления */}
             <Filter
-            filters={filters}
-            onFilterChange={handleFilterChange} />
+                filters={filters}
+                onFilterChange={handleFilterChange}
+            />
 
-            {/*Секция с результатами */}
             <section className={styles.results}>
-                {/*Показываем количество найденных преподавателей */}
                 <div className={styles.resultsInfo}>
                     <p>
                         Found {filteredTeachers.length} teacher{filteredTeachers.length !== 1 ? 's' : ''}
                         {filters.language && ` teaching ${filters.language}`}
                     </p>
                 </div>
-                {/*Список преподавателей */}
+                
                 <div className={styles.teachersGrid}>
-                {/*Рендерим каждого преподавателя используя TeacherCard */}
-                {/*Важно передать key - React использует его для оптимизации обновлений */}
-                {filteredTeachers.map(teacher => (
-                    <TeacherCard 
-                    key={teacher.id} 
-                    teacher={teacher}
-                    onFavoriteToggle={(teacherId, isFavorite) => {
-                        console.log(`Teacher ${teacherId} ${isFavorite ? 'added to' : 'removed from'} favorites`);
-                    }} />
-                ))}
+                    {filteredTeachers.map(teacher => (
+                        <TeacherCard 
+                            key={teacher.id} 
+                            teacher={teacher}
+                            onFavoriteToggle={(teacherId, isFavorite) => {
+                                console.log(`Teacher ${teacherId} ${isFavorite ? 'added to' : 'removed from'} favorites`);
+                            }}
+                        />
+                    ))}
                 </div>
-            {/* Сообщение если нет результатов */}
-            {filteredTeachers.length === 0 && !loading && (
-                <div className={styles.noResults}>
-                    <h3>No teachers found</h3>
-                    <p>Try adjusting your filters to see more results.</p>
-                </div>
-            )}
+            
+                {filteredTeachers.length === 0 && !loading && (
+                    <div className={styles.noResults}>
+                        <h3>No teachers found</h3>
+                        <p>Try adjusting your filters to see more results.</p>
+                    </div>
+                )}
 
-            {/*Кнопка "Load More" для пагинации */}
-            {/*Показываем если есть  еще данные для загрузки */}
-            {hasMore && (
-                <div className={styles.loadMoreContainer}>
-
-                 <button 
-                 onClick={handleLoadMore}
-                 disabled={loading}
-                 className={styles.loadMoreButton}>
-
-                    {loading ? 'Loading...' :  'Load More'}
-
-                 </button>
-                </div>
-            )}
+                {hasMore && (
+                    <div className={styles.loadMoreContainer}>
+                        <button 
+                            onClick={handleLoadMore}
+                            disabled={loading}
+                            className={styles.loadMoreButton}
+                        >
+                            {loading ? 'Loading...' : 'Load More'}
+                        </button>
+                    </div>
+                )}
             </section>
-
         </div>
-    )
-}
+    );
+};
 
 export default Teachers;
