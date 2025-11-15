@@ -1,0 +1,81 @@
+.header {
+    width: 100%;
+    background-color: var(--color-white);
+    padding: 24px 0;
+    border-bottom: 1px solid #E2E2E2;
+  }
+  
+  .container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 20px;
+  
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .logoText {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-text-main);
+  }
+  
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-left: 60px;
+  }
+  
+  .navLink {
+    font-size: 16px;
+    color: var(--color-text-main);
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .navLink:hover {
+    color: var(--color-primary-dark);
+  }
+  
+  .right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .loginBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 16px;
+    color: var(--color-text-main);
+    font-weight: 500;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  
+  .registrationBtn {
+    background: var(--color-black);
+    color: var(--color-white);
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .registrationBtn:hover {
+    background: #222222;
+  }
+  
