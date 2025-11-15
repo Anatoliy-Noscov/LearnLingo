@@ -1,81 +1,111 @@
+/* Общий контейнер хедера */
 .header {
     width: 100%;
-    background-color: var(--color-white);
-    padding: 24px 0;
-    border-bottom: 1px solid #E2E2E2;
+    background: #ffffff;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 20;
   }
   
+  /* Контейнер по центру */
   .container {
-    max-width: var(--container-width);
+    max-width: 1280px;
+    padding: 0 32px;
     margin: 0 auto;
-    padding: 0 20px;
   
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
   }
   
+  /* ==== LEFT: LOGO ==== */
   .left {
     display: flex;
     align-items: center;
     gap: 12px;
   }
   
-  .logoText {
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--color-text-main);
+  .logoIcon {
+    width: 36px;
+    height: 36px;
   }
   
+  .logoText {
+    font-size: 22px;
+    font-weight: 700;
+    color: #121417;
+  }
+  
+  /* ==== CENTER: NAVIGATION ==== */
   .nav {
     display: flex;
-    align-items: center;
-    gap: 32px;
-    margin-left: 60px;
+    gap: 24px;
   }
   
   .navLink {
     font-size: 16px;
-    color: var(--color-text-main);
     font-weight: 500;
-    cursor: pointer;
+    color: #121417;
+    text-decoration: none;
     transition: color 0.2s ease;
   }
   
   .navLink:hover {
-    color: var(--color-primary-dark);
+    color: #8a53ff; /* цвет из макета */
   }
   
+  /* ==== RIGHT: BUTTONS ==== */
   .right {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
   }
   
+  /* Login (иконка + текст) */
   .loginBtn {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 16px;
-    color: var(--color-text-main);
-    font-weight: 500;
-    cursor: pointer;
-    background: none;
+    gap: 8px;
+  
+    background: transparent;
     border: none;
+    cursor: pointer;
+  
+    font-size: 16px;
+    font-weight: 500;
+    color: #121417;
+  
+    transition: opacity 0.2s ease;
   }
   
-  .registrationBtn {
-    background: var(--color-black);
-    color: var(--color-white);
-    padding: 12px 24px;
-    border-radius: var(--radius-sm);
+  .loginBtn:hover {
+    opacity: 0.7;
+  }
+  
+  .loginIcon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Registration (primary) */
+  .registerBtn {
+    background: #8a53ff;
+    border: none;
+    border-radius: 12px;
+  
+    padding: 10px 22px;
+    cursor: pointer;
+  
+    color: #fff;
     font-size: 16px;
     font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease;
+  
+    transition: background 0.25s ease;
   }
   
-  .registrationBtn:hover {
-    background: #222222;
+  .registerBtn:hover {
+    background: #6f3adc;
   }
   
