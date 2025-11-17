@@ -1,24 +1,21 @@
-import React from 'react';
-import styles from './Home.module.css';
+// app/page.tsx
+// Главная страница приложения.
+// Здесь просто собираем компоненты Hero и Stats,
+// чтобы Home была "чистой" и соответствовала макету.
 
-// Импортируем новые компоненты Hero и Stats
-import { Hero } from '../../components/Hero/Hero';
-import { Stats } from '../../components/Stats/Stats';
+import Hero from "../../components/Hero/Hero";
+import Stats from "../../components/Stats/Stats";
 
-/**
- * Главная страница — полностью соответствует макету.
- * Включает:
- *  - Hero (верхний блок с заголовком и изображением)
- *  - Stats (секция статистики)
- */
-export const Home: React.FC = () => {
+import styles from "./page.module.css";
+
+export default function Home() {
   return (
-    <div className={styles.home}>
-      {/* Большой hero-блок */}
+    <main className={styles.container}>
+      {/* Верхний большой герой-блок */}
       <Hero />
 
-      {/* Блок статистики (цифры) */}
+      {/* Блок статистики под героем */}
       <Stats />
-    </div>
+    </main>
   );
-};
+}
