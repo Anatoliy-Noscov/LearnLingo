@@ -1,8 +1,8 @@
-.home {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 80px; /* расстояние между секциями */
-    padding-bottom: 80px;
-  }
-  
+/* Основной контейнер главной страницы */
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
