@@ -1,276 +1,30 @@
+/* Основной контейнер страницы */
 .container {
-    max-height: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
-.header {
-    text-align: center;
-    margin-bottom: 40px;
+/* Обёртка для фильтров */
+.filterWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
-.title {
-    font-size: 2.5rem;
-    color: #2d3436;
-    margin-bottom: 1rem;
+/* Сетка карточек */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
-.subtitle {
-    font-size: 2.5rem;
-    color: #636e72;
+/* Стиль загрузки */
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #8c8c8c;
 }
-
-.loadingContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 20px;
-    text-align: center;
-}
-
-.errorContainer {
-    text-align: center;
-    padding: 60px 20px;
-    color: #d63031;
-}
-
-.retryButton {
-    background: #0984e3;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 1rem;
-}
-
-.retryButton:hover {
-    background: #0770c4;
-}
-
-.resultsInfo {
-    margin-bottom: 20px;
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    color: #636e72;
-}
-
-.teachersGrid {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-bottom: 40px;
-}
-
-.loadMoreContainer {
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
-}
-
-.loadMoreButton {
-    background: #0984e3;
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 6px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.loadMoreButton:hover:not(:disabled) {
-    background: #0770c4;
-    transform: translateY(-2px);
-}
-
-.loadMoreButton:disabled {
-    background: #b2bec3;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.noResults {
-    text-align: center;
-    padding: 60px 20px;
-    color: #636e72;
-}
-
-.noResults h3 {
-    margin-bottom: 1rem;
-    color: #2d3436;
-}
-
-
-@media (max-width: 768px) {
-    .container {
-        padding: 15px;
-    }
-    .title {
-        font-size: 2rem;
-    }
-
-    .subtitle {
-        font-size: 1rem;
-    }
-}
-
-.card {
-    width: 100%;
-    background: var(--color-white);
-    border-radius: 24px;
-    padding: 32px;
-    display: flex;
-    gap: 32px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.06);
-  }
-  
-  /* -------------------- AVATAR -------------------- */
-  
-  .avatarWrapper {
-    width: 120px;
-    height: 120px;
-    border-radius: 16px;
-    overflow: hidden;
-    flex-shrink: 0;
-  }
-  
-  .avatar {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  /* -------------------- INFO -------------------- */
-  
-  .info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  /* TOP ROW */
-  .top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .specialization {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--color-primary-dark);
-  }
-  
-  .favoriteBtn {
-    font-size: 26px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    transition: 0.2s;
-  }
-  
-  .favoriteBtn:hover {
-    transform: scale(1.1);
-  }
-  
-  .active {
-    color: var(--color-primary-dark);
-  }
-  
-  /* NAME */
-  .name {
-    font-size: 28px;
-    font-weight: 700;
-    margin-top: -6px;
-  }
-  
-  /* STATS */
-  .stats {
-    display: flex;
-    gap: 24px;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--color-text-main);
-  }
-  
-  .gray {
-    color: var(--color-text-sub);
-  }
-  
-  .statItem {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  
-  /* EXPERIENCE */
-  .experience {
-    font-size: 15px;
-    color: var(--color-text-main);
-    margin-top: 4px;
-  }
-  
-  /* BOTTOM LINE */
-  .bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 12px;
-  }
-  
-  .price {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  
-  .priceValue {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--color-primary-dark);
-  }
-  
-  /* BUTTON */
-  .bookBtn {
-    background: var(--color-primary);
-    border: none;
-    padding: 14px 26px;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease;
-    white-space: nowrap;
-  }
-  
-  .bookBtn:hover {
-    background: var(--color-primary-dark);
-  }
-  
-  /* RESPONSIVE */
-  @media (max-width: 700px) {
-    .card {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-  
-    .info {
-      align-items: center;
-    }
-  
-    .stats {
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-  
-    .bottom {
-      flex-direction: column;
-      gap: 16px;
-    }
-  }
-  
