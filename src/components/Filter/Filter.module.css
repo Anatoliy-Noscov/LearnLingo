@@ -1,97 +1,94 @@
-.filterContainer {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 32px;
-    border: 1px solid #e1e5e9;
-}
-
-.filterTitle {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: #2d3436;
-    text-align: center;
-}
-
-.filterGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+/* Общий контейнер всех фильтров */
+.filter {
+    display: flex;
+    align-items: center;
     gap: 20px;
-    align-items: end;
-}
-
-.filterGroup {
+  
+    background: #f8f8f8;
+    padding: 16px 24px;
+    border-radius: 16px;
+  
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  /* Общий dropdown блок */
+  .dropdown {
+    position: relative;
+  }
+  
+  /* Кнопка dropdown */
+  .dropdownBtn {
+    background: #fff;
+    border: 1px solid #e4e4e4;
+    border-radius: 14px;
+    padding: 10px 16px;
+    min-width: 140px;
+    cursor: pointer;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border 0.2s ease;
+  }
+  
+  .dropdownBtn:hover {
+    border-color: #121417;
+  }
+  
+  .arrow {
+    font-size: 12px;
+  }
+  
+  /* Выпадающее меню */
+  .menu {
+    position: absolute;
+    top: 48px;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e6e6e6;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  
     display: flex;
     flex-direction: column;
-}
-
-.filterLabel {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #2d3436;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.filterSelect {
-    padding: 12px solid #e1e5e9;
-    border-radius: 8px;
-    font-size: 1rem;
-    background: white;
-    color: #2d3436;
+    overflow: hidden;
+    z-index: 10;
+  }
+  
+  /* Элемент внутри меню */
+  .menuItem {
+    padding: 12px 16px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23636e72' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 12px;
-}
-
-.filterSelect:focus {
-    outline: none;
-    border-color: #0984e3;
-    box-shadow: 0 0 0 3px rgba(9, 133, 227, 0.1);
-}
-
-.filterSelect:hover {
-    border-color: #b2bec3;
-}
-
-
-.resetButton {
-    padding: 12px 20px;
-    background: #636e72;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: 15px;
+  }
+  
+  .menuItem:hover {
+    background: #f2f2f2;
+  }
+  
+  /* Активный выбранный элемент */
+  .active {
+    background: #e8ecff;
     font-weight: 600;
+  }
+  
+  /* Кнопка сброса */
+  .resetBtn {
+    background: #fff0f0;
+    border: 1px solid #ffb4b4;
+    color: #d10000;
+  
+    padding: 10px 18px;
+    border-radius: 14px;
+  
     cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.resetButton:hover {
-    background: #2d3436;
-    transform: translate(-1px);
-}
-
-@madia (max-width: 768px) {
-    .filterContainer {
-        padding: 16px;
-        margin-bottom: 24px;
-    }
-
-    .filterGrid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-
-    .filterTitle {
-        font-size: 1.3rem;
-        margin-bottom: 16px;
-    }
-}
+    font-size: 15px;
+    transition: 0.2s ease;
+  }
+  
+  .resetBtn:hover {
+    background: #ffe2e2;
+  }
+  
