@@ -134,13 +134,13 @@ import React from 'react';
 import styles from './Teachers.module.css';
 
 // Компонент карточки преподавателя
-import { TeacherCard } from '../../components/features/TeacherCard/TeacherCard';
+import { TeacherCard } from '../../components/TeacherCard/TeacherCard';
 
 // Хук, который получает список учителей (твоя логика)
 import { useTeachers } from '../../hooks/useTeachers';
 
 // Компонент фильтров (ты попросил позже — добавим по очереди)
-import { Filter } from '../../components/features/Filter/Filter';
+import { Filter } from '../../components/Filter/Filter';
 
 /*
   Teachers page — Страница "Преподаватели"
