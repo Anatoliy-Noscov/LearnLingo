@@ -74,65 +74,43 @@
 
 // export default Modal;
 
-import React, { useEffect } from "react";
-import styles from "./Modal.module.css";
+import React from 'react';
+import styles from './Modal.module.css';
 
 /*
-  Modal component — UI полностью переписан под макет.
-  Добавлена анимация, затемнение фона, центрирование,
-  кнопка закрытия и блокировка scroll при открытии.
+  Modal — универсальное модальное окно
+  ----------------------------------------------------
+  - Используется для AuthForm и любых других модалок
+  - Новый UI в стиле Figma: размытый фон, центрирование,
+    плавная анимация, аккуратная карточка
+  - Вся твоя логика открытия/закрытия остаётся
 */
 
 interface ModalProps {
-  isOpen: boolean;               // Управление открытием/закрытием модалки
-  onClose: () => void;           // Закрытие при клике на крестик/overlay
-  title?: string;                // Заголовок модального окна
-  children: React.ReactNode;     // Контент модалки — форма входа или регистрации
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
 }
 
-export const Modal: React.FC<ModalProps> = ({
-  isOpen,
-  onClose,
-  title,
-  children,
-}) => {
+export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
 
-  // Блокируем скролл страницы, когда модалка открыта
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
-
-  // Закрытие по клику на фон
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
+  // Клик по заднему фону закрывает модалку
+  const handleBackgroundClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) onClose();
   };
 
-  if (!isOpen) return null; // Не рендерим компонент, если он закрыт
-
   return (
-    <div className={styles.overlay} onClick={handleOverlayClick}>
-      <div className={styles.modal}>
-
+    <div className={styles.overlay} onClick={handleBackgroundClick}>
+      <div className={styles.modalCard}>
+        
         {/* Кнопка закрытия */}
         <button className={styles.closeBtn} onClick={onClose}>
           ✕
         </button>
 
-        {/* Заголовок модалки */}
-        {title && <h2 className={styles.title}>{title}</h2>}
-
-        {/* Основной контент (форма логина/регистрации) */}
-        <div className={styles.content}>{children}</div>
+        {/* Вставляем содержимое (AuthForm или другое) */}
+        {children}
       </div>
     </div>
   );
