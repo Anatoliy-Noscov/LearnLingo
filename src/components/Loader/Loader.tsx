@@ -1,45 +1,26 @@
-import React from 'react';
-import styles from './Loader.module.css';
+import React from "react";
+import styles from "./Loader.module.css";
 
 interface LoaderProps {
-    size?: 'small' | 'medium' | 'large';
-    color?: 'string';
-    text?: string;
+  size?: "small" | "medium" | "large";
+  text?: string;
 }
 
-export const Loader: React.FC<LoaderProps> = ({ 
-    size = 'medium',
-    color = '#0984e3',
-    text 
-}) => {
-    const getSize = () => {
-        switch (size) {
-            case 'small':
-                return '40px';
-            case 'large':
-                return '80px';
-            case 'medium':
-            default: 
-            return '60px';
-        }
-    }
-    
+/*
+  Loader — круговой индикатор загрузки
+  - UI полностью переделан под макет Figma
+  - Плавная анимация stroke-dashoffset
+  - 3 размера: small / medium / large
+*/
 
-    return (
+export const Loader: React.FC<LoaderProps> = ({ size = "medium", text }) => {
+  return (
+    <div className={`${styles.wrapper} ${styles[size]}`}>
+      <svg className={styles.spinner} viewBox="0 0 50 50">
+        <circle className={styles.path} cx="25" cy="25" r="20" fill="none" />
+      </svg>
 
-        <div className={styles.loaderContainer}>
-            {/*Basic element loader */}
-            <div className={styles.spinner}
-            style={{
-                width: getSize(),
-                height: getSize(),
-                borderColor: color
-            }}>
-            </div>
-            {/**Условный рендеринг текста */}
-            {text && <p className={styles.loaderText}>{text}</p>}
-        </div>
-
-    )
-}
-export default Loader;
+      {text && <p className={styles.text}>{text}</p>}
+    </div>
+  );
+};
