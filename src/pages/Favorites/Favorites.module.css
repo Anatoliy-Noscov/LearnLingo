@@ -1,102 +1,64 @@
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    min-height: 70vh;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 80px 20px;
+}
+
+/* Header */
+.header {
+  margin-bottom: 40px;
+}
+
+.title {
+  font-size: 38px;
+  font-weight: 600;
+  color: #121212;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #6d6d6d;
+}
+
+/* Empty State */
+.empty {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.emptyImg {
+  width: 200px;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.empty h3 {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.empty p {
+  color: #6d6d6d;
+  font-size: 16px;
+}
+
+/* Grid */
+.grid {
+  margin-top: 20px;
+  display: grid;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  .header {
-    text-align: center;
-    margin-bottom: 40px;
+}
+
+@media (min-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
   }
-  
-  .title {
-    font-size: 2.5rem;
-    color: #2d3436;
-    margin-bottom: 1rem;
-  }
-  
-  .subtitle {
-    font-size: 1.2rem;
-    color: #636e72;
-  }
-  
-  .favoritesGrid {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .unauthorized {
-    text-align: center;
-    padding: 60px 20px;
-  }
-  
-  .unauthorized h1 {
-    margin-bottom: 1rem;
-    color: #2d3436;
-  }
-  
-  .unauthorized p {
-    color: #636e72;
-    font-size: 1.1rem;
-  }
-  
-  .emptyState {
-    text-align: center;
-    padding: 80px 20px;
-    background: #f8f9fa;
-    border-radius: 16px;
-    border: 2px dashed #e1e5e9;
-  }
-  
-  .emptyStateIcon {
-    font-size: 4rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .emptyState h3 {
-    font-size: 1.5rem;
-    color: #2d3436;
-    margin-bottom: 1rem;
-  }
-  
-  .emptyState p {
-    color: #636e72;
-    margin-bottom: 2rem;
-    font-size: 1.1rem;
-  }
-  
-  .ctaButton {
-    display: inline-block;
-    background: #0984e3;
-    color: white;
-    padding: 12px 30px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-  }
-  
-  .ctaButton:hover {
-    background: #0770c4;
-    transform: translateY(-2px);
-  }
-  
-  @media (max-width: 768px) {
-    .container {
-      padding: 20px 15px;
-    }
-    
-    .title {
-      font-size: 2rem;
-    }
-    
-    .emptyState {
-      padding: 40px 20px;
-    }
-    
-    .emptyStateIcon {
-      font-size: 3rem;
-    }
-  }
+}
