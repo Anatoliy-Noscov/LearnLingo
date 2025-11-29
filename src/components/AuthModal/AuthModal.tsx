@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./AuthModal.module.css";
-import { Modal } from "../common/Modal/Modal";
+import { Modal } from "../Modal/Modal";
 
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
