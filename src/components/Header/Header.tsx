@@ -1,72 +1,33 @@
-// import React from 'react';
-// import { Link } from 'react-router-dom';
-// import {useAuth} from '../../hooks/useAuth';
-// import styles from './Header.module.css';
-
-
-// export const Header: React.FC = () => {
-//   const { user, logout } = useAuth();
-
-//   return (
-//     <header className={styles.header}>
-//       <div className={styles.container}>
-
-//         <Link to="/" className={styles.logo}>Learn Lingo</Link>
-
-//         <nav className={styles.nav}>
-
-//           <Link to="/" className={styles.navLink}>Home</Link>
-//           <Link to="/teachers" className={styles.navLink}>Teachers</Link>
-//           {user && (
-//             <Link to="/favorites" className={styles.navLink}>Favorites</Link>
-//           )}
-//         </nav>
-        
-//           <div className={styles.authSection}>
-//             {user ? (
-//               <div className={styles.userInfo}>
-//                 <span>Welcome, {user.email}</span>
-//                 <button onClick={logout} className={styles.logoutBtn}>Logout</button>
-//               </div>
-//             ) : (
-//               <button className={styles.loginBtn}>Login</button>
-//             )}
-//           </div>
-//       </div>
-//     </header>
-//   )
-// }
-
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./Header.module.css";
+import { useAuth } from "../../hooks/useAuth";
 
-// ❗ ВАЖНО:
-// Сейчас хедер — полностью по макету:
-// - логотип слева
-// - ссылки по центру
-// - справа кнопки Log in + Registration
-// Позже мы добавим твою логику авторизации (Welcome, Logout)
-// но UI уже будет соответствовать макету.
-
-// Если хочешь — Login кнопка будет открывать модалку (через props)
+/*
+  Header — полностью адаптирован под макет.
+  + Включена твоя логика авторизации:
+      если user есть → показываем Welcome + Logout
+      если user нет → Login + Registration
+  + Кнопки Login / Register открывают AuthModal (через props)
+*/
 
 interface HeaderProps {
-  onLoginClick?: () => void;        // открыть окно логина
-  onRegisterClick?: () => void;     // открыть окно регистрации
+  onLoginClick?: () => void;      // открыть логин модалку
+  onRegisterClick?: () => void;   // открыть регистрацию модалку
 }
 
 export const Header: React.FC<HeaderProps> = ({
   onLoginClick,
   onRegisterClick
 }) => {
+  const { user, logout } = useAuth();
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-
+        
         {/* LEFT — LOGO */}
         <div className={styles.left}>
-          {/* Логотип как в макете (замени путь если нужно) */}
           <img
             src="/icons/logo.svg"
             alt="Logo"
@@ -80,32 +41,58 @@ export const Header: React.FC<HeaderProps> = ({
           <Link to="/" className={styles.navLink}>
             Home
           </Link>
+
           <Link to="/teachers" className={styles.navLink}>
             Teachers
           </Link>
+
+          {user && (
+            <Link to="/favorites" className={styles.navLink}>
+              Favorites
+            </Link>
+          )}
         </nav>
 
-        {/* RIGHT — AUTH BUTTONS */}
+        {/* RIGHT — AUTH AREA */}
         <div className={styles.right}>
-          {/* Log in button (иконка + текст) */}
-          <button className={styles.loginBtn} onClick={onLoginClick}>
-            <img
-              src="/icons/login.svg"
-              alt="login"
-              className={styles.loginIcon}
-            />
-            <span>Log in</span>
-          </button>
 
-          {/* Registration — primary button */}
-          <button
-            className={styles.registerBtn}
-            onClick={onRegisterClick}
-          >
-            Registration
-          </button>
+          {user ? (
+            /* Если пользователь авторизован */
+            <div className={styles.userInfo}>
+              <span className={styles.welcome}>Welcome, {user.email}</span>
+
+              <button
+                className={styles.logoutBtn}
+                onClick={logout}
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            /* Если пользователь НЕ авторизован */
+            <>
+              <button
+                className={styles.loginBtn}
+                onClick={onLoginClick}
+              >
+                <img
+                  src="/icons/login.svg"
+                  alt="login"
+                  className={styles.loginIcon}
+                />
+                <span>Log in</span>
+              </button>
+
+              <button
+                className={styles.registerBtn}
+                onClick={onRegisterClick}
+              >
+                Registration
+              </button>
+            </>
+          )}
+
         </div>
-
       </div>
     </header>
   );
