@@ -1,111 +1,190 @@
-/* Общий контейнер хедера */
+/* ============================================================
+   HEADER — UI как в макете Figma
+   ============================================================ */
+
+/* Вся шапка */
 .header {
-    width: 100%;
-    background: #ffffff;
-    border-bottom: 1px solid #e6e6e6;
-    padding: 20px 0;
-    position: sticky;
-    top: 0;
-    z-index: 20;
-  }
-  
-  /* Контейнер по центру */
+  width: 100%;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  /* Лёгкая тень как в макете */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+/* Контейнер контента */
+.container {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px 24px;
+}
+
+/* ============================================================
+   LEFT — LOGO
+   ============================================================ */
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logoIcon {
+  width: 32px;
+  height: 32px;
+}
+
+.logoText {
+  font-size: 20px;
+  font-weight: 700;
+  color: #121417;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ============================================================
+   NAVIGATION (center)
+   ============================================================ */
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navLink {
+  font-size: 16px;
+  color: #4b5563;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.25s ease;
+}
+
+.navLink:hover {
+  color: #111827;
+}
+
+/* ============================================================
+   RIGHT — Auth buttons
+   ============================================================ */
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Log in */
+.loginBtn {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 8px 14px;
+
+  font-size: 16px;
+  color: #111827;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.loginBtn:hover {
+  background: #f3f4f6;
+}
+
+.loginIcon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Registration */
+.registerBtn {
+  background: #f2c94c;
+  border: none;
+  padding: 10px 20px;
+
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.registerBtn:hover {
+  background: #e5b93a;
+}
+
+/* ============================================================
+   AUTHENTICATED STATE (Welcome + Logout)
+   ============================================================ */
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.welcome {
+  font-size: 15px;
+  color: #374151;
+}
+
+.logoutBtn {
+  background: #ef4444;
+  color: #ffffff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.logoutBtn:hover {
+  background: #dc2626;
+}
+
+/* ============================================================
+   MOBILE (адаптация)
+   ============================================================ */
+
+@media (max-width: 768px) {
   .container {
-    max-width: 1280px;
-    padding: 0 32px;
-    margin: 0 auto;
-  
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 12px 16px;
   }
-  
-  /* ==== LEFT: LOGO ==== */
-  .left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  
-  .logoIcon {
-    width: 36px;
-    height: 36px;
-  }
-  
-  .logoText {
-    font-size: 22px;
-    font-weight: 700;
-    color: #121417;
-  }
-  
-  /* ==== CENTER: NAVIGATION ==== */
+
   .nav {
-    display: flex;
-    gap: 24px;
+    display: none; /* пока без бургера */
   }
-  
-  .navLink {
-    font-size: 16px;
-    font-weight: 500;
-    color: #121417;
-    text-decoration: none;
-    transition: color 0.2s ease;
+
+  .logoText {
+    font-size: 18px;
   }
-  
-  .navLink:hover {
-    color: #8a53ff; /* цвет из макета */
-  }
-  
-  /* ==== RIGHT: BUTTONS ==== */
-  .right {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  
-  /* Login (иконка + текст) */
-  .loginBtn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  
-    font-size: 16px;
-    font-weight: 500;
-    color: #121417;
-  
-    transition: opacity 0.2s ease;
-  }
-  
-  .loginBtn:hover {
-    opacity: 0.7;
-  }
-  
-  .loginIcon {
-    width: 20px;
-    height: 20px;
-  }
-  
-  /* Registration (primary) */
+
   .registerBtn {
-    background: #8a53ff;
-    border: none;
-    border-radius: 12px;
-  
-    padding: 10px 22px;
-    cursor: pointer;
-  
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-  
-    transition: background 0.25s ease;
+    padding: 8px 14px;
+    font-size: 14px;
   }
-  
-  .registerBtn:hover {
-    background: #6f3adc;
+
+  .loginBtn span {
+    display: none; /* скрываем текст — оставляем иконку */
   }
-  
+
+  .loginBtn {
+    padding: 8px;
+  }
+}
