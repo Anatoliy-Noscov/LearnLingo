@@ -1,37 +1,19 @@
-/* ============================================================
-   HEADER — UI как в макете Figma
-   ============================================================ */
-
-/* Вся шапка */
 .header {
   width: 100%;
-  border-bottom: 1px solid #e5e7eb;
   background: #ffffff;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-
-  /* Лёгкая тень как в макете */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-/* Контейнер контента */
 .container {
   max-width: 1280px;
-  width: 100%;
   margin: 0 auto;
-
+  padding: 16px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  padding: 16px 24px;
 }
 
-/* ============================================================
-   LEFT — LOGO
-   ============================================================ */
-
+/* LEFT — LOGO */
 .left {
   display: flex;
   align-items: center;
@@ -45,146 +27,90 @@
 
 .logoText {
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
   color: #121417;
-  font-family: 'Inter', sans-serif;
 }
 
-/* ============================================================
-   NAVIGATION (center)
-   ============================================================ */
-
+/* CENTER — NAVIGATION */
 .nav {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
 }
 
 .navLink {
   font-size: 16px;
-  color: #4b5563;
+  color: #121417;
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.25s ease;
 }
 
 .navLink:hover {
-  color: #111827;
+  color: #8a8a8a;
 }
 
-/* ============================================================
-   RIGHT — Auth buttons
-   ============================================================ */
-
+/* RIGHT — AUTH BUTTONS */
 .right {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-/* Log in */
 .loginBtn {
-  background: transparent;
-  border: none;
   display: flex;
   align-items: center;
   gap: 6px;
 
-  padding: 8px 14px;
-
+  background: transparent;
+  border: none;
   font-size: 16px;
-  color: #111827;
+  color: #121417;
   cursor: pointer;
-  border-radius: 8px;
-  transition: background 0.2s ease;
-}
-
-.loginBtn:hover {
-  background: #f3f4f6;
 }
 
 .loginIcon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 }
 
-/* Registration */
 .registerBtn {
-  background: #f2c94c;
-  border: none;
-  padding: 10px 20px;
-
-  border-radius: 10px;
+  padding: 10px 22px;
+  background: #121417;
+  color: white;
+  border-radius: 16px;
   font-size: 16px;
-  font-weight: 600;
-
+  border: none;
   cursor: pointer;
-  transition: background 0.25s ease;
 }
 
 .registerBtn:hover {
-  background: #e5b93a;
+  opacity: 0.9;
 }
 
-/* ============================================================
-   AUTHENTICATED STATE (Welcome + Logout)
-   ============================================================ */
 
-.userInfo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.welcome {
-  font-size: 15px;
-  color: #374151;
-}
-
-.logoutBtn {
-  background: #ef4444;
-  color: #ffffff;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 8px;
-
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.25s ease;
-}
-
-.logoutBtn:hover {
-  background: #dc2626;
-}
-
-/* ============================================================
-   MOBILE (адаптация)
-   ============================================================ */
-
+/* 📱 MOBILE — по макету */
 @media (max-width: 768px) {
-  .container {
-    padding: 12px 16px;
+  .nav {
+    display: none; /* скрываем навигацию — её нет в макете */
   }
 
-  .nav {
-    display: none; /* пока без бургера */
+  .container {
+    padding: 14px 16px;
   }
 
   .logoText {
     font-size: 18px;
   }
 
-  .registerBtn {
-    padding: 8px 14px;
-    font-size: 14px;
-  }
-
   .loginBtn span {
-    display: none; /* скрываем текст — оставляем иконку */
+    display: none; /* в макете мобильного текста нет — только иконка */
+  }
+  
+  .loginBtn {
+    padding: 6px;
   }
 
-  .loginBtn {
-    padding: 8px;
+  .registerBtn {
+    padding: 8px 18px;
+    font-size: 15px;
   }
 }
