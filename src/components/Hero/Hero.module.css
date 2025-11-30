@@ -1,90 +1,114 @@
 .hero {
-    width: 100%;
-    margin-top: 40px;
+  width: 100%;
+  padding: 120px 0;
+  background: #f0f4ff;
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  width: min(1240px, 90%);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.left {
+  max-width: 540px;
+}
+
+.title {
+  font-size: 58px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #1c1c1c;
+  margin-bottom: 24px;
+}
+
+.accent {
+  color: #3056d3;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.ctaButton {
+  display: inline-block;
+  padding: 16px 32px;
+  background-color: #3056d3;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.ctaButton:hover {
+  background-color: #2448c2;
+}
+
+/* === RIGHT IMAGE === */
+.right {
+  position: relative;
+}
+
+.heroImage {
+  width: 520px;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* === RESPONSIVE === */
+
+@media (max-width: 1024px) {
+  .title {
+    font-size: 48px;
   }
-  
+
+  .heroImage {
+    width: 420px;
+  }
+}
+
+@media (max-width: 768px) {
   .container {
-    max-width: var(--container-width);
-    margin: 0 auto;
-    padding: 0 20px;
-  
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
-  
-    background: var(--color-bg-light);
-    border-radius: 30px;
-    padding: 60px 70px;
-  
+    flex-direction: column-reverse;
+    text-align: center;
     gap: 40px;
   }
-  
-  /* LEFT SIDE */
+
   .left {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    max-width: 100%;
   }
-  
+
+  .heroImage {
+    width: 360px;
+  }
+}
+
+@media (max-width: 480px) {
   .title {
-    font-size: 46px;
-    font-weight: 700;
-    line-height: 1.2;
-    color: var(--color-text-main);
-    margin-bottom: 24px;
+    font-size: 36px;
   }
-  
-  .highlight {
-    background: var(--color-primary);
-    padding: 0 8px;
-    border-radius: 6px;
-  }
-  
+
   .subtitle {
     font-size: 16px;
-    color: var(--color-text-sub);
-    line-height: 1.6;
-    max-width: 480px;
-    margin-bottom: 32px;
   }
-  
-  .cta {
-    background: var(--color-primary);
-    border: none;
-    padding: 16px 32px;
-    border-radius: 12px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease;
+
+  .ctaButton {
+    padding: 14px 26px;
+    font-size: 16px;
   }
-  
-  .cta:hover {
-    background: var(--color-primary-dark);
+
+  .heroImage {
+    width: 300px;
   }
-  
-  /* RIGHT SIDE */
-  .right {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .imageWrapper {
-    width: 100%;
-    background: #F6E6B3;
-    border-radius: 30px;
-    padding: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-  }
-  
-  .image {
-    width: 100%;
-    max-width: 380px;
-    object-fit: contain;
-  }
-  
+}
