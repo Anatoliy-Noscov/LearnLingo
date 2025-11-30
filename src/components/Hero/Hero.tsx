@@ -1,40 +1,46 @@
+import React from "react";
 import styles from "./Hero.module.css";
-import { Link } from "react-router-dom";
 
-export const Hero = () => {
+/*
+  Hero Section — первый экран на главной странице
+  Полностью по макету Figma.
+
+  ✔ Большой заголовок
+  ✔ Подзаголовок
+  ✔ CTA кнопка
+  ✔ Изображение справа (hero-character.png)
+  ✔ Адаптив до 360px
+*/
+
+export const Hero: React.FC = () => {
   return (
     <section className={styles.hero}>
       <div className={styles.container}>
         
-        {/* LEFT SIDE */}
+        {/* --- LEFT SIDE (TEXT) --- */}
         <div className={styles.left}>
           <h1 className={styles.title}>
-            Unlock your potential with <br />
-            the best <span className={styles.highlight}>language</span> tutors
+            Master <span className={styles.accent}>English</span> with the Best
           </h1>
 
           <p className={styles.subtitle}>
-            Embark on an Exciting Language Journey with Expert Language Tutors: 
-            Elevate your language proficiency to new heights by connecting with 
-            highly qualified and experienced tutors.
+            Practice speaking, reading, and listening with professional tutors.
+            Boost your language skills today.
           </p>
 
-          <Link to="/teachers">
-            <button className={styles.cta}>Get started</button>
-          </Link>
+          <a href="#teachers" className={styles.ctaButton}>
+            Get Started
+          </a>
         </div>
 
-        {/* RIGHT SIDE */}
+        {/* --- RIGHT SIDE (IMAGE) --- */}
         <div className={styles.right}>
-          <div className={styles.imageWrapper}>
-            <img
-              src="/images/hero-character.png" 
-              alt="Character"
-              className={styles.image}
-            />
-          </div>
+          <img
+            src="/images/hero-character.png"
+            alt="Hero"
+            className={styles.heroImage}
+          />
         </div>
-
       </div>
     </section>
   );
