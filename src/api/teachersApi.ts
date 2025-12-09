@@ -1,71 +1,80 @@
+// src/api/teachersApi.ts
 import { ref, get, query, limitToFirst, startAt, orderByKey } from 'firebase/database';
 import { database } from './firebase';
 import type { Teacher } from '../types';
 
 const TEACHERS_PER_PAGE = 4;
 
-// Интерфейс для ответа API
-interface TeachersResponse {
+export interface TeachersResponse {
   teachers: Teacher[];
   hasMore: boolean;
   lastKey?: string;
 }
 
-// Получение преподавателей с пагинацией
+/**
+ * Нормализует данные snapshot в массив Teacher.
+ * Поддерживает разные форматы (объект ключ->value или массив).
+ */
+const normalizeTeachers = (raw: any): Teacher[] => {
+  if (!raw) return [];
+
+  // Если это массивоподобная структура
+  if (Array.isArray(raw)) {
+    return raw
+      .map((item, idx) => item && typeof item === 'object' ? ({ id: String(idx), ...item } as Teacher) : null)
+      .filter(Boolean) as Teacher[];
+  }
+
+  // Обычный объект: ключи -> записи
+  return Object.entries(raw).map(([key, value]) => ({
+    id: key,
+    ...(value as any)
+  })) as Teacher[];
+};
+
+/**
+ * Получение списка преподавателей с поддержкой пагинации по ключу.
+ * Принцип:
+ *  - Для первой страницы запрашиваем limit = TEACHERS_PER_PAGE
+ *  - Для следующих страниц запрашиваем limit = TEACHERS_PER_PAGE + 1 и startAt(lastKey)
+ *    затем удаляем первый элемент (это предыдущий lastKey)
+ */
 export const getTeachers = async (page: number = 0, lastKey?: string): Promise<TeachersResponse> => {
   try {
     const teachersRef = ref(database, 'teachers');
-    
-    let teachersQuery;
-    if (page === 0) {
-      // Первая страница
-      teachersQuery = query(
-        teachersRef,
-        orderByKey(),
-        limitToFirst(TEACHERS_PER_PAGE)
-      );
+    let q;
+
+    if (!lastKey || page === 0) {
+      // первая страница или при сбросе пагинации
+      q = query(teachersRef, orderByKey(), limitToFirst(TEACHERS_PER_PAGE));
     } else {
-      // Последующие страницы
-      teachersQuery = query(
-        teachersRef,
-        orderByKey(),
-        startAt(lastKey),
-        limitToFirst(TEACHERS_PER_PAGE + 1) // +1 чтобы проверить есть ли еще данные
-      );
+      // последующие страницы — запрашиваем +1 элемент чтобы понять есть ли дальше
+      q = query(teachersRef, orderByKey(), startAt(lastKey), limitToFirst(TEACHERS_PER_PAGE + 1));
     }
 
-    const snapshot = await get(teachersQuery);
-    
+    const snapshot = await get(q);
+
     if (!snapshot.exists()) {
       return { teachers: [], hasMore: false };
     }
 
-    const teachersData = snapshot.val();
-    const teacherKeys = Object.keys(teachersData);
-    
-    // Преобразуем данные в массив Teacher
-    const teachers: Teacher[] = teacherKeys.map(key => ({
-      id: key,
-      ...teachersData[key]
-    }));
+    const raw = snapshot.val();
+    let teachers = normalizeTeachers(raw);
 
-    // Определяем есть ли еще данные
-    let hasMore = false;
-    let newLastKey: string | undefined;
-
-    if (page === 0) {
-      hasMore = teacherKeys.length === TEACHERS_PER_PAGE;
-      newLastKey = teacherKeys[teacherKeys.length - 1];
-    } else {
-      // Для последующих страниц проверяем есть ли дополнительный элемент
-      hasMore = teacherKeys.length > TEACHERS_PER_PAGE;
-      newLastKey = teacherKeys[teacherKeys.length - (hasMore ? 2 : 1)];
-      
-      // Убираем последний элемент если он был только для проверки
-      if (hasMore) {
-        teachers.pop();
+    // Если это не первая страница — первый элемент будет повтором lastKey, убираем его
+    if (lastKey && teachers.length > 0) {
+      // Если первый ключ === lastKey — удаляем
+      if (teachers[0].id === lastKey) {
+        teachers = teachers.slice(1);
+      } else {
+        // Если по какой-то причине первая запись не равна lastKey,
+        // всё равно оставляем как есть (без удаления).
       }
     }
+
+    // Определяем hasMore и newLastKey
+    const hasMore = teachers.length === TEACHERS_PER_PAGE;
+    const newLastKey = teachers.length > 0 ? teachers[teachers.length - 1].id : undefined;
 
     return {
       teachers,
@@ -73,97 +82,78 @@ export const getTeachers = async (page: number = 0, lastKey?: string): Promise<T
       lastKey: newLastKey
     };
   } catch (error: any) {
-    console.error('Error fetching teachers from Firebase:', error);
-    throw new Error(`Failed to fetch teachers: ${error.message}`);
+    console.error('getTeachers error:', error);
+    throw new Error(error?.message || 'Failed to fetch teachers');
   }
 };
 
-// Получение преподавателя по ID
+/**
+ * Получение одного преподавателя по id
+ */
 export const getTeacherById = async (teacherId: string): Promise<Teacher | null> => {
   try {
+    if (!teacherId) return null;
     const teacherRef = ref(database, `teachers/${teacherId}`);
     const snapshot = await get(teacherRef);
-    
-    if (snapshot.exists()) {
-      return {
-        id: teacherId,
-        ...snapshot.val()
-      };
-    }
-    
-    return null;
+
+    if (!snapshot.exists()) return null;
+
+    const raw = snapshot.val();
+    return { id: teacherId, ...(raw as any) } as Teacher;
   } catch (error: any) {
-    console.error('Error fetching teacher from Firebase:', error);
-    throw new Error(`Failed to fetch teacher: ${error.message}`);
+    console.error('getTeacherById error:', error);
+    throw new Error(error?.message || 'Failed to fetch teacher');
   }
 };
 
-// Получение избранных преподавателей
+/**
+ * Получение набора преподавателей по массиву id (параллельно)
+ */
 export const getFavoriteTeachers = async (favoriteIds: string[]): Promise<Teacher[]> => {
   try {
-    // Для эффективности можно загружать всех избранных преподавателей одним запросом
-    const teachers: Teacher[] = [];
-    
-    for (const teacherId of favoriteIds) {
-      const teacher = await getTeacherById(teacherId);
-      if (teacher) {
-        teachers.push(teacher);
-      }
-    }
-    
-    return teachers;
+    if (!favoriteIds || favoriteIds.length === 0) return [];
+    const promises = favoriteIds.map((id) => getTeacherById(id));
+    const results = await Promise.all(promises);
+    return results.filter(Boolean) as Teacher[];
   } catch (error: any) {
-    console.error('Error fetching favorite teachers from Firebase:', error);
-    throw new Error(`Failed to fetch favorite teachers: ${error.message}`);
+    console.error('getFavoriteTeachers error:', error);
+    throw new Error(error?.message || 'Failed to fetch favorite teachers');
   }
 };
 
-// Поиск преподавателей по фильтрам
+/**
+ * Клиентская фильтрация (используется для простоты).
+ * При большом объёме данных — рекомендую реализовать серверную фильтрацию.
+ */
 export const searchTeachers = async (filters: {
   language?: string;
   level?: string;
   maxPrice?: number;
 }): Promise<Teacher[]> => {
   try {
-    // Получаем всех преподавателей для фильтрации на клиенте
-    // В реальном приложении лучше делать это на сервере
     const teachersRef = ref(database, 'teachers');
     const snapshot = await get(teachersRef);
-    
-    if (!snapshot.exists()) {
-      return [];
-    }
 
-    const teachersData = snapshot.val();
-    const teachers: Teacher[] = Object.keys(teachersData).map(key => ({
-      id: key,
-      ...teachersData[key]
-    }));
+    if (!snapshot.exists()) return [];
 
-    // Применяем фильтры
-    let filteredTeachers = teachers;
+    const raw = snapshot.val();
+    let teachers = normalizeTeachers(raw);
 
     if (filters.language) {
-      filteredTeachers = filteredTeachers.filter(teacher =>
-        teacher.languages.includes(filters.language!)
-      );
+      teachers = teachers.filter(t => Array.isArray(t.languages) && t.languages.includes(filters.language!));
     }
 
     if (filters.level) {
-      filteredTeachers = filteredTeachers.filter(teacher =>
-        teacher.levels.includes(filters.level!)
-      );
+      teachers = teachers.filter(t => Array.isArray(t.levels) && t.levels.includes(filters.level!));
     }
 
-    if (filters.maxPrice && filters.maxPrice > 0) {
-      filteredTeachers = filteredTeachers.filter(teacher =>
-        teacher.price_per_hour <= filters.maxPrice!
-      );
+    if (typeof filters.maxPrice === 'number' && filters.maxPrice > 0) {
+      teachers = teachers.filter(t => typeof t.price_per_hour === 'number' && t.price_per_hour <= filters.maxPrice!);
     }
 
-    return filteredTeachers;
+    return teachers;
   } catch (error: any) {
-    console.error('Error searching teachers in Firebase:', error);
-    throw new Error(`Failed to search teachers: ${error.message}`);
+    console.error('searchTeachers error:', error);
+    throw new Error(error?.message || 'Failed to search teachers');
   }
 };
