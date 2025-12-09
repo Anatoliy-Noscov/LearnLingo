@@ -74,17 +74,11 @@
 
 // export default Modal;
 
-import React from 'react';
-import styles from './Modal.module.css';
+// src/components/Modal/Modal.tsx
 
-/*
-  Modal — универсальное модальное окно
-  ----------------------------------------------------
-  - Используется для AuthForm и любых других модалок
-  - Новый UI в стиле Figma: размытый фон, центрирование,
-    плавная анимация, аккуратная карточка
-  - Вся твоя логика открытия/закрытия остаётся
-*/
+import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import styles from './Modal.module.css';
 
 interface ModalProps {
   isOpen: boolean;
@@ -92,26 +86,39 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
+const modalRoot = document.getElementById('modal-root');
+
 export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (!isOpen) return;
 
-  // Клик по заднему фону закрывает модалку
-  const handleBackgroundClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) onClose();
-  };
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
 
-  return (
-    <div className={styles.overlay} onClick={handleBackgroundClick}>
-      <div className={styles.modalCard}>
-        
-        {/* Кнопка закрытия */}
-        <button className={styles.closeBtn} onClick={onClose}>
-          ✕
-        </button>
+    // block scroll
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleEsc);
 
-        {/* Вставляем содержимое (AuthForm или другое) */}
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !modalRoot) return null;
+
+  return createPortal(
+    <div className={styles.backdrop} onClick={onClose}>
+      <div
+        className={styles.modal}
+        onClick={(e) => e.stopPropagation()}
+      >
         {children}
       </div>
-    </div>
+    </div>,
+    modalRoot
   );
 };
