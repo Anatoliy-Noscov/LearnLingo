@@ -1,16 +1,13 @@
 import React, { useState } from "react";
+import styles from "../AuthForm/AuthForm.module.css";
 import { useAuth } from "../../context/AuthProvider";
-import { useToast } from "../../context/ToastContext";
-import styles from "./AuthForm.module.css";
 
-interface Props {
-  switchToLogin: () => void;
+interface RegisterFormProps {
   onSuccess: () => void;
 }
 
-export const RegisterForm: React.FC<Props> = ({ switchToLogin, onSuccess }) => {
+export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
   const { register } = useAuth();
-  const { showError, showSuccess } = useToast();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -19,30 +16,27 @@ export const RegisterForm: React.FC<Props> = ({ switchToLogin, onSuccess }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name.trim()) return showError("Name is required");
-    if (!email.trim()) return showError("Email is required");
-    if (!password.trim()) return showError("Password is required");
+    await register({
+      name,
+      email,
+      password,
+    });
 
-    try {
-      await register({ name, email, password });
-      showSuccess("Account successfully created!");
-      onSuccess();
-    } catch (err: any) {
-      showError(err.message || "Registration failed");
-    }
+    onSuccess();
   };
 
   return (
     <div>
       <h2 className={styles.title}>Registration</h2>
-      <p className={styles.subtitle}>Fill in your details to sign up</p>
+      <p className={styles.subtitle}>Create your personal account</p>
 
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.field}>
           <label>Name</label>
           <input
             type="text"
-            placeholder="Your name"
+            placeholder="Enter your name"
+            required
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -52,7 +46,8 @@ export const RegisterForm: React.FC<Props> = ({ switchToLogin, onSuccess }) => {
           <label>Email</label>
           <input
             type="email"
-            placeholder="test@mail.com"
+            placeholder="Enter your email"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -62,7 +57,9 @@ export const RegisterForm: React.FC<Props> = ({ switchToLogin, onSuccess }) => {
           <label>Password</label>
           <input
             type="password"
-            placeholder="•••••••••"
+            placeholder="Create a password"
+            required
+            minLength={6}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -71,20 +68,6 @@ export const RegisterForm: React.FC<Props> = ({ switchToLogin, onSuccess }) => {
         <button className={styles.submitBtn} type="submit">
           Sign Up
         </button>
-
-        <p style={{ fontSize: 14, textAlign: "center", marginTop: 14 }}>
-          Already have an account?{" "}
-          <span
-            onClick={switchToLogin}
-            style={{
-              color: "#3470ff",
-              cursor: "pointer",
-              fontWeight: 500,
-            }}
-          >
-            Login
-          </span>
-        </p>
       </form>
     </div>
   );
