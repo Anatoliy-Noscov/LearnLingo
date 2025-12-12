@@ -1,100 +1,91 @@
-// src/components/Auth/RegisterForm.tsx
+import React, { useState } from "react";
+import { useAuth } from "../../context/AuthProvider";
+import { useToast } from "../../context/ToastContext";
+import styles from "./AuthForm.module.css";
 
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-
-import styles from './AuthForm.module.css';
-import { useAuth } from '../../context/AuthProvider';
-
-interface RegisterFormValues {
-  email: string;
-  password: string;
-  confirmPassword: string;
+interface Props {
+  switchToLogin: () => void;
+  onSuccess: () => void;
 }
 
-const schema = yup.object({
-  email: yup
-    .string()
-    .email('Invalid email')
-    .required('Email is required'),
-  password: yup
-    .string()
-    .min(6, 'Minimum 6 characters')
-    .required('Password is required'),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password')], 'Passwords must match')
-    .required('Confirm password is required'),
-});
+export const RegisterForm: React.FC<Props> = ({ switchToLogin, onSuccess }) => {
+  const { register } = useAuth();
+  const { showError, showSuccess } = useToast();
 
-export const RegisterForm = () => {
-  const { register: registerUser } = useAuth();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<RegisterFormValues>({
-    resolver: yupResolver(schema),
-  });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const onSubmit = async (data: RegisterFormValues) => {
-    await registerUser(data.email, data.password);
+    if (!name.trim()) return showError("Name is required");
+    if (!email.trim()) return showError("Email is required");
+    if (!password.trim()) return showError("Password is required");
+
+    try {
+      await register({ name, email, password });
+      showSuccess("Account successfully created!");
+      onSuccess();
+    } catch (err: any) {
+      showError(err.message || "Registration failed");
+    }
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+    <div>
       <h2 className={styles.title}>Registration</h2>
+      <p className={styles.subtitle}>Fill in your details to sign up</p>
 
-      <label className={styles.label}>
-        Email
-        <input
-          type="email"
-          placeholder="Enter your email"
-          {...register('email')}
-          disabled={isSubmitting}
-        />
-        {errors.email && (
-          <span className={styles.error}>{errors.email.message}</span>
-        )}
-      </label>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <div className={styles.field}>
+          <label>Name</label>
+          <input
+            type="text"
+            placeholder="Your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
 
-      <label className={styles.label}>
-        Password
-        <input
-          type="password"
-          placeholder="Create a password"
-          {...register('password')}
-          disabled={isSubmitting}
-        />
-        {errors.password && (
-          <span className={styles.error}>{errors.password.message}</span>
-        )}
-      </label>
+        <div className={styles.field}>
+          <label>Email</label>
+          <input
+            type="email"
+            placeholder="test@mail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-      <label className={styles.label}>
-        Confirm password
-        <input
-          type="password"
-          placeholder="Repeat password"
-          {...register('confirmPassword')}
-          disabled={isSubmitting}
-        />
-        {errors.confirmPassword && (
-          <span className={styles.error}>
-            {errors.confirmPassword.message}
+        <div className={styles.field}>
+          <label>Password</label>
+          <input
+            type="password"
+            placeholder="•••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        <button className={styles.submitBtn} type="submit">
+          Sign Up
+        </button>
+
+        <p style={{ fontSize: 14, textAlign: "center", marginTop: 14 }}>
+          Already have an account?{" "}
+          <span
+            onClick={switchToLogin}
+            style={{
+              color: "#3470ff",
+              cursor: "pointer",
+              fontWeight: 500,
+            }}
+          >
+            Login
           </span>
-        )}
-      </label>
-
-      <button
-        type="submit"
-        className={styles.submitBtn}
-        disabled={isSubmitting}
-      >
-        Sign Up
-      </button>
-    </form>
+        </p>
+      </form>
+    </div>
   );
 };
