@@ -1,13 +1,16 @@
-import React from 'react';
+// src/components/BookingModal/BookingModal.tsx
+
+import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Modal } from '../../components/Modal/Modal';
-import type { Teacher } from '../../types';
+
+import { Modal } from '../Modal/Modal';
+import { Teacher } from '../../types';
+
 import styles from './BookingModal.module.css';
 
-// Интерфейс для данных формы бронирования
-interface BookingFormData {
+export interface BookingFormData {
   name: string;
   email: string;
   phone: string;
@@ -15,236 +18,119 @@ interface BookingFormData {
   message?: string;
 }
 
-// Интерфейс для пропсов компонента
-interface BookingModalProps {
+interface Props {
   isOpen: boolean;
   onClose: () => void;
   teacher: Teacher;
-  onBookingSubmit: (data: BookingFormData) => void;
+  onBookingSubmit: (data: BookingFormData) => Promise<void> | void;
 }
 
-// Схема валидации с помощью Yup
-const bookingSchema = yup.object({
-  name: yup
-    .string()
-    .required('Name is required')
-    .min(2, 'Name must be at least 2 characters')
-    .max(50, 'Name must not exceed 50 characters'),
-  
-  email: yup
-    .string()
-    .required('Email is required')
-    .email('Please enter a valid email address'),
-  
-  phone: yup
-    .string()
-    .required('Phone number is required')
-    .matches(/^\+?[\d\s\-()]+$/, 'Please enter a valid phone number')
-    .min(10, 'Phone number must be at least 10 digits'),
-  
-  lessonTime: yup
-    .string()
-    .required('Please select a lesson time'),
-  
-  message: yup
-    .string()
-    .max(500, 'Message must not exceed 500 characters')
-    .optional()
-    .default('') // Исправлено: добавляем default значение
+const schema: yup.SchemaOf<BookingFormData> = yup.object({
+  name: yup.string().required().min(2).max(50),
+  email: yup.string().required().email(),
+  phone: yup.string().required().min(10),
+  lessonTime: yup.string().required(),
+  message: yup.string().max(500).optional(),
 });
 
-export const BookingModal: React.FC<BookingModalProps> = ({
+const generateTimeSlots = (): string[] =>
+  Array.from({ length: 12 }, (_, i) => `${9 + i}:00`);
+
+const BookingModal: React.FC<Props> = ({
   isOpen,
   onClose,
   teacher,
-  onBookingSubmit
+  onBookingSubmit,
 }) => {
-  // Инициализация react-hook-form с Yup валидацией
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
-    reset
   } = useForm<BookingFormData>({
-    resolver: yupResolver(bookingSchema) as any, // Исправлено: явное приведение типа
-    mode: 'onChange'
+    resolver: yupResolver(schema),
+    mode: 'onSubmit',
   });
 
-  // Обработчик отправки формы
-  const onSubmit = async (data: BookingFormData) => {
-    try {
-      await onBookingSubmit(data);
-      reset();
-      onClose();
-    } catch (error) {
-      console.error('Booking submission error:', error);
-    }
-  };
+  const timeSlots = useMemo(generateTimeSlots, []);
 
-  // Обработчик закрытия модалки
-  const handleClose = () => {
+  const submitHandler = async (data: BookingFormData) => {
+    await onBookingSubmit(data);
     reset();
     onClose();
   };
 
-  // Генерируем доступные временные слоты
-  const generateTimeSlots = () => {
-    const slots = [];
-    const startHour = 9;
-    const endHour = 21;
-    
-    for (let hour = startHour; hour < endHour; hour++) {
-      const timeLabel = hour < 12 ? `${hour}:00 AM` : 
-                       hour === 12 ? '12:00 PM' : 
-                       `${hour - 12}:00 PM`;
-      slots.push(
-        <option key={hour} value={`${hour}:00`}>
-          {timeLabel}
-        </option>
-      );
-    }
-    
-    return slots;
+  const closeHandler = () => {
+    reset();
+    onClose();
   };
 
   return (
     <Modal
       isOpen={isOpen}
-      onClose={handleClose}
-      title={`Book Trial Lesson with ${teacher.name} ${teacher.surname}`}
-      size="medium"
+      onClose={closeHandler}
+      title={`Book trial lesson`}
     >
-      <div className={styles.bookingModal}>
+      <div className={styles.bookingModal} role="dialog" aria-modal="true">
+        {/* TEACHER INFO */}
         <div className={styles.teacherInfo}>
-          <img 
-            src={teacher.avatar_url} 
-            alt={teacher.name}
+          <img
+            src={teacher.avatar_url}
+            alt={`${teacher.name} ${teacher.surname}`}
             className={styles.teacherAvatar}
           />
-          <div className={styles.teacherDetails}>
+
+          <div>
             <h3>{teacher.name} {teacher.surname}</h3>
-            <p className={styles.teacherLanguages}>
-              Teaches: {teacher.languages.join(', ')}
-            </p>
-            <p className={styles.teacherPrice}>
-              Price: <strong>${teacher.price_per_hour}/hour</strong>
-            </p>
+            <p>{teacher.languages.join(', ')}</p>
+            <strong>${teacher.price_per_hour}/hour</strong>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className={styles.bookingForm}>
-          <div className={styles.formGroup}>
-            <label htmlFor="name" className={styles.formLabel}>
-              Full Name *
-            </label>
-            <input
-              id="name"
-              type="text"
-              className={`${styles.formInput} ${
-                errors.name ? styles.inputError : ''
-              }`}
-              placeholder="Enter your full name"
-              {...register('name')}
-            />
-            {errors.name && (
-              <span className={styles.errorMessage}>{errors.name.message}</span>
-            )}
-          </div>
+        {/* FORM */}
+        <form onSubmit={handleSubmit(submitHandler)} className={styles.bookingForm}>
+          <label>
+            Full name
+            <input {...register('name')} />
+            {errors.name && <span>{errors.name.message}</span>}
+          </label>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="email" className={styles.formLabel}>
-              Email Address *
-            </label>
-            <input
-              id="email"
-              type="email"
-              className={`${styles.formInput} ${
-                errors.email ? styles.inputError : ''
-              }`}
-              placeholder="your.email@example.com"
-              {...register('email')}
-            />
-            {errors.email && (
-              <span className={styles.errorMessage}>{errors.email.message}</span>
-            )}
-          </div>
+          <label>
+            Email
+            <input type="email" {...register('email')} />
+            {errors.email && <span>{errors.email.message}</span>}
+          </label>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="phone" className={styles.formLabel}>
-              Phone Number *
-            </label>
-            <input
-              id="phone"
-              type="tel"
-              className={`${styles.formInput} ${
-                errors.phone ? styles.inputError : ''
-              }`}
-              placeholder="+1 (555) 123-4567"
-              {...register('phone')}
-            />
-            {errors.phone && (
-              <span className={styles.errorMessage}>{errors.phone.message}</span>
-            )}
-          </div>
+          <label>
+            Phone
+            <input type="tel" {...register('phone')} />
+            {errors.phone && <span>{errors.phone.message}</span>}
+          </label>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="lessonTime" className={styles.formLabel}>
-              Preferred Lesson Time *
-            </label>
-            <select
-              id="lessonTime"
-              className={`${styles.formSelect} ${
-                errors.lessonTime ? styles.inputError : ''
-              }`}
-              {...register('lessonTime')}
-            >
-              <option value="">Select a time slot</option>
-              {generateTimeSlots()}
+          <label>
+            Lesson time
+            <select {...register('lessonTime')}>
+              <option value="">Select time</option>
+              {timeSlots.map(t => (
+                <option key={t} value={t}>{t}</option>
+              ))}
             </select>
-            {errors.lessonTime && (
-              <span className={styles.errorMessage}>{errors.lessonTime.message}</span>
-            )}
-          </div>
+            {errors.lessonTime && <span>{errors.lessonTime.message}</span>}
+          </label>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="message" className={styles.formLabel}>
-              Additional Message (Optional)
-            </label>
-            <textarea
-              id="message"
-              className={styles.formTextarea}
-              placeholder="Any specific topics you'd like to focus on?"
-              rows={4}
-              {...register('message')}
-            />
-            {errors.message && (
-              <span className={styles.errorMessage}>{errors.message.message}</span>
-            )}
-          </div>
+          <label>
+            Message (optional)
+            <textarea rows={4} {...register('message')} />
+          </label>
 
           <div className={styles.formActions}>
-            <button
-              type="button"
-              onClick={handleClose}
-              className={styles.cancelButton}
-              disabled={isSubmitting}
-            >
+            <button type="button" onClick={closeHandler} disabled={isSubmitting}>
               Cancel
             </button>
-            <button
-              type="submit"
-              className={styles.submitButton}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Booking...' : 'Book Trial Lesson'}
-            </button>
-          </div>
 
-          <div className={styles.bookingNote}>
-            <p>
-              <strong>Note:</strong> After booking, the teacher will contact you 
-              within 24 hours to confirm the lesson details.
-            </p>
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Booking...' : 'Book lesson'}
+            </button>
           </div>
         </form>
       </div>
