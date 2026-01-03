@@ -1,84 +1,69 @@
-.wrapper {
-    width: 100%;
-    max-width: 400px;
-    padding: 32px;
-    background: #fff;
-    border-radius: 20px;
-  }
-  
-  .tabs {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-    gap: 12px;
-  }
-  
-  .tab {
-    padding: 10px 20px;
-    border-radius: 10px;
-    background: #f3f3f3;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-    color: #6f6f6f;
-    transition: 0.25s;
-  }
-  
-  .active {
-    background: #8b5cf6;
-    color: #fff;
-  }
-  
-  .title {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 26px;
-    font-weight: 600;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .label {
-    font-size: 14px;
-    font-weight: 500;
-    color: #222;
-  }
-  
-  .input {
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #dcdcdc;
-    font-size: 16px;
-  }
-  
-  .submitBtn {
-    margin-top: 10px;
-    padding: 12px;
-    border-radius: 12px;
-    border: none;
-    background: #8b5cf6;
-    color: white;
-    font-weight: 600;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s ease;
-  }
-  
-  .submitBtn:hover {
-    background: #7c3aed;
-  }
-  
-  .error {
-    background: #ffe2e2;
-    color: #d60000;
-    padding: 10px 14px;
-    border-radius: 10px;
-    margin-bottom: 12px;
-    font-size: 14px;
-    font-weight: 500;
-  }
-  
+.authModal {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+}
+
+.title {
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+  color: #191c1f;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.tab {
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1px solid #e1e5e9;
+  background: #f8f9fa;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.tab:hover {
+  background: #e9ecef;
+}
+
+.active {
+  background: #0984e3;
+  color: white;
+  border-color: #0984e3;
+}
+
+/* Content */
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #636e72;
+}
+
+.link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #0984e3;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
