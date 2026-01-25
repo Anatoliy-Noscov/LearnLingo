@@ -1,68 +1,95 @@
-import React, { useState } from "react";
-import styles from "./AuthModal.module.css";
-import { useAuth } from "../../hooks/useAuth";
+// src/components/LoginForm/LoginForm.tsx
 
-/*
-  LoginForm — форма авторизации
-  - использует AuthContext
-  - показывает ошибки
-  - работает внутри AuthModal
-*/
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
-interface Props {
-  onSuccess: () => void;
+import styles from './LoginForm.module.css';
+import { useAuth } from '../../hooks/useAuth';
+import { useToast } from '../../context/ToastContext';
+
+interface LoginFormData {
+  email: string;
+  password: string;
 }
 
-export const LoginForm: React.FC<Props> = ({ onSuccess }) => {
+interface LoginFormProps {
+  onSuccess?: () => void;
+}
+
+const schema = yup.object({
+  email: yup
+    .string()
+    .required('Email is required')
+    .email('Invalid email'),
+
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(6, 'Minimum 6 characters'),
+});
+
+export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const { login } = useAuth();
+  const { addToast } = useToast();
 
-  // поля формы
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: yupResolver(schema),
+    mode: 'onChange',
+  });
 
-  // ошибка
-  const [error, setError] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    setError("");
-
+  const onSubmit = async (data: LoginFormData) => {
     try {
-      await login(email, password);
-      onSuccess();
-    } catch (err: any) {
-      setError(err.message || "Login failed");
+      await login(data.email, data.password);
+      addToast('Successfully logged in', 'success');
+      onSuccess?.();
+    } catch (e: any) {
+      addToast(e?.message || 'Login failed', 'error');
     }
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      {error && <div className={styles.error}>{error}</div>}
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      {/* EMAIL */}
+      <div className={styles.group}>
+        <label>Email</label>
+        <input
+          type="email"
+          {...register('email')}
+          className={errors.email ? styles.errorInput : ''}
+        />
+        {errors.email && (
+          <span className={styles.error}>{errors.email.message}</span>
+        )}
+      </div>
 
-      <label className={styles.label}>Email</label>
-      <input
-        className={styles.input}
-        type="email"
-        placeholder="Enter your email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      {/* PASSWORD */}
+      <div className={styles.group}>
+        <label>Password</label>
+        <input
+          type="password"
+          {...register('password')}
+          className={errors.password ? styles.errorInput : ''}
+        />
+        {errors.password && (
+          <span className={styles.error}>{errors.password.message}</span>
+        )}
+      </div>
 
-      <label className={styles.label}>Password</label>
-      <input
-        className={styles.input}
-        type="password"
-        placeholder="Enter password"
-        required
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
-      <button className={styles.submitBtn} type="submit">
-        Log In
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className={styles.submit}
+      >
+        {isSubmitting ? 'Logging in...' : 'Login'}
       </button>
     </form>
   );
 };
+
+export default LoginForm;
