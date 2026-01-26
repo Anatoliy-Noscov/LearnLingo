@@ -1,5 +1,3 @@
-// src/components/LoginForm/LoginForm.tsx
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,18 +17,11 @@ interface LoginFormProps {
 }
 
 const schema = yup.object({
-  email: yup
-    .string()
-    .required('Email is required')
-    .email('Invalid email'),
-
-  password: yup
-    .string()
-    .required('Password is required')
-    .min(6, 'Minimum 6 characters'),
+  email: yup.string().required('Email is required').email('Invalid email'),
+  password: yup.string().required('Password is required').min(6),
 });
 
-export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const { login } = useAuth();
   const { addToast } = useToast();
 
@@ -40,7 +31,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: yupResolver(schema),
-    mode: 'onChange',
   });
 
   const onSubmit = async (data: LoginFormData) => {
@@ -55,38 +45,20 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      {/* EMAIL */}
       <div className={styles.group}>
         <label>Email</label>
-        <input
-          type="email"
-          {...register('email')}
-          className={errors.email ? styles.errorInput : ''}
-        />
-        {errors.email && (
-          <span className={styles.error}>{errors.email.message}</span>
-        )}
+        <input {...register('email')} />
+        {errors.email && <span>{errors.email.message}</span>}
       </div>
 
-      {/* PASSWORD */}
       <div className={styles.group}>
         <label>Password</label>
-        <input
-          type="password"
-          {...register('password')}
-          className={errors.password ? styles.errorInput : ''}
-        />
-        {errors.password && (
-          <span className={styles.error}>{errors.password.message}</span>
-        )}
+        <input type="password" {...register('password')} />
+        {errors.password && <span>{errors.password.message}</span>}
       </div>
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className={styles.submit}
-      >
-        {isSubmitting ? 'Logging in...' : 'Login'}
+      <button type="submit" disabled={isSubmitting}>
+        Login
       </button>
     </form>
   );
