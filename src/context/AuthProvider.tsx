@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from 'react';
+// src/context/AuthProvider.tsx
+import React, { useState, useEffect } from 'react';
 import type { User } from 'firebase/auth';
 import { auth } from '../api/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { signUp as apiSignUp, login as apiLogin, logout as apiLogout } from '../api/authApi';
 import { useToast } from './ToastContext';
-import { AuthContext } from './AuthContext';
+import { AuthContext, type AuthContextType } from './AuthContext';
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+interface AuthProviderProps {
+  children: React.ReactNode;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const { addToast } = useToast();
@@ -22,8 +27,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return result;
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      addToast('An unexpected error occurred during sign up', 'error');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      addToast('Unexpected error during sign up', 'error');
       return { success: false, error: errorMessage };
     }
   };
@@ -39,8 +44,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return result;
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      addToast('An unexpected error occurred during login', 'error');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      addToast('Unexpected error during login', 'error');
       return { success: false, error: errorMessage };
     }
   };
@@ -56,8 +61,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return result;
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      addToast('An unexpected error occurred during logout', 'error');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      addToast('Unexpected error during logout', 'error');
       return { success: false, error: errorMessage };
     }
   };
@@ -71,17 +76,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return unsubscribe;
   }, []);
 
-  const value = {
+  const value: AuthContextType = {
     user,
+    loading,
     signUp,
     login,
-    logout,
-    loading
+    logout
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
 };
