@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Modal } from '../Modal/Modal';
-import  LoginForm  from './LoginForm';
+import  { LoginForm }  from './LoginForm';
 import  { RegisterForm } from '../RegisterForm/RegisterForm';
 import styles from './AuthModal.module.css';
 
