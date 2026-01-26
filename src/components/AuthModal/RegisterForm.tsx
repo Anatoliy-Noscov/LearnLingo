@@ -1,41 +1,38 @@
-import React, { useState } from "react";
-import styles from "./AuthModal.module.css";
-import { useAuth } from "../../hooks/useAuth";
+// src/components/RegisterForm/RegisterForm.tsx
+import React, { useState } from 'react';
+import styles from './RegisterForm.module.css';
+import { useAuth } from '../../hooks/useAuth';
 
-/*
-  RegisterForm — форма регистрации
-  - пароль + повтор пароля
-  - показывает ошибки валидации
-  - использует AuthContext.register(...)
-*/
-
-interface Props {
+interface RegisterFormProps {
   onSuccess: () => void;
 }
 
-export const RegisterForm: React.FC<Props> = ({ onSuccess }) => {
-  const { register } = useAuth();
+export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
+  const { signUp } = useAuth();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [repeatPassword, setRepeatPassword] = useState("");
-
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     if (password !== repeatPassword) {
-      setError("Passwords do not match");
+      setError('Passwords do not match');
       return;
     }
 
     try {
-      await register(email, password);
-      onSuccess();
+      const result = await signUp(email, password);
+      if (result.success) {
+        onSuccess();
+      } else {
+        setError(result.error || 'Registration failed');
+      }
     } catch (err: any) {
-      setError(err.message || "Registration failed");
+      setError(err.message || 'Registration failed');
     }
   };
 
@@ -47,30 +44,27 @@ export const RegisterForm: React.FC<Props> = ({ onSuccess }) => {
       <input
         className={styles.input}
         type="email"
-        placeholder="Enter your email"
-        required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        required
       />
 
       <label className={styles.label}>Password</label>
       <input
         className={styles.input}
         type="password"
-        placeholder="Create password"
-        required
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        required
       />
 
       <label className={styles.label}>Repeat password</label>
       <input
         className={styles.input}
         type="password"
-        placeholder="Repeat password"
-        required
         value={repeatPassword}
         onChange={(e) => setRepeatPassword(e.target.value)}
+        required
       />
 
       <button className={styles.submitBtn} type="submit">
