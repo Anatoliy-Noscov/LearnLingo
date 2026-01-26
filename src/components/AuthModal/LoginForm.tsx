@@ -7,26 +7,33 @@ interface LoginFormProps {
   onSuccess?: () => void;
 }
 
+// Тип результата login
+interface AuthResult {
+  success: boolean;
+  error?: string;
+}
+
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const { login } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
 
     try {
-      const result = await login(email, password);
+      const result: AuthResult = await login(email, password);
       if (result.success) {
         onSuccess?.();
       } else {
         setError(result.error || 'Login failed');
       }
-    } catch (err: any) {
-      setError(err.message || 'Login failed');
+    } catch (err) {
+      const unknownError = err as Error;
+      setError(unknownError?.message || 'Login failed');
     }
   };
 
