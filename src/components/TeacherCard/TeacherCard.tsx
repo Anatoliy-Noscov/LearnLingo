@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import styles from './TeacherCard.module.css';
-import { Teacher } from '../../types';
+import type { Teacher } from '../../types';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 import BookingModal from '../BookingModal/BookingModal';

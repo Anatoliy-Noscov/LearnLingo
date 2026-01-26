@@ -1,7 +1,7 @@
 // src/hooks/useTeachers.ts
 
 import { useEffect, useState } from 'react';
-import { Teacher } from '../types';
+import type { Teacher } from '../types';
 import { fetchTeachers } from '../api/teachersApi';
 
 interface UseTeachersResult {
