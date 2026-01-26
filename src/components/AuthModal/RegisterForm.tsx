@@ -7,15 +7,21 @@ interface RegisterFormProps {
   onSuccess: () => void;
 }
 
+// Тип результата signUp
+interface AuthResult {
+  success: boolean;
+  error?: string;
+}
+
 export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
   const { signUp } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
 
@@ -25,14 +31,16 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
     }
 
     try {
-      const result = await signUp(email, password);
+      const result: AuthResult = await signUp(email, password);
       if (result.success) {
         onSuccess();
       } else {
         setError(result.error || 'Registration failed');
       }
-    } catch (err: any) {
-      setError(err.message || 'Registration failed');
+    } catch (err) {
+      // Если нужно, можно уточнить тип через unknown
+      const unknownError = err as Error;
+      setError(unknownError?.message || 'Registration failed');
     }
   };
 
