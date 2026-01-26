@@ -1,12 +1,11 @@
 // src/components/BookingModal/BookingModal.tsx
-
 import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { Modal } from '../Modal/Modal';
-import { Teacher } from '../../types';
+import type { Teacher } from '../../types'; // ✅ type-only import
 
 import styles from './BookingModal.module.css';
 
@@ -25,11 +24,12 @@ interface Props {
   onBookingSubmit: (data: BookingFormData) => Promise<void> | void;
 }
 
-const schema: yup.SchemaOf<BookingFormData> = yup.object({
-  name: yup.string().required().min(2).max(50),
-  email: yup.string().required().email(),
-  phone: yup.string().required().min(10),
-  lessonTime: yup.string().required(),
+// yup схема
+const schema: yup.ObjectSchema<BookingFormData> = yup.object({
+  name: yup.string().required('Full name is required').min(2).max(50),
+  email: yup.string().required('Email is required').email('Invalid email'),
+  phone: yup.string().required('Phone is required').min(10),
+  lessonTime: yup.string().required('Please select a lesson time'),
   message: yup.string().max(500).optional(),
 });
 
@@ -66,11 +66,7 @@ const BookingModal: React.FC<Props> = ({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={closeHandler}
-      title={`Book trial lesson`}
-    >
+    <Modal isOpen={isOpen} onClose={closeHandler}>
       <div className={styles.bookingModal} role="dialog" aria-modal="true">
         {/* TEACHER INFO */}
         <div className={styles.teacherInfo}>
@@ -81,7 +77,9 @@ const BookingModal: React.FC<Props> = ({
           />
 
           <div>
-            <h3>{teacher.name} {teacher.surname}</h3>
+            <h3>
+              {teacher.name} {teacher.surname}
+            </h3>
             <p>{teacher.languages.join(', ')}</p>
             <strong>${teacher.price_per_hour}/hour</strong>
           </div>
@@ -111,8 +109,10 @@ const BookingModal: React.FC<Props> = ({
             Lesson time
             <select {...register('lessonTime')}>
               <option value="">Select time</option>
-              {timeSlots.map(t => (
-                <option key={t} value={t}>{t}</option>
+              {timeSlots.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
               ))}
             </select>
             {errors.lessonTime && <span>{errors.lessonTime.message}</span>}
