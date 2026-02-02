@@ -4,32 +4,39 @@ import { getTeachers } from '../api/teachersApi';
 
 export const useTeachers = () => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
-  const [lastKey, setLastKey] = useState<string | undefined>();
+  const [lastKey, setLastKey] = useState<string>();
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    load();
+    loadMore();
   }, []);
 
-  const load = async () => {
+  const loadMore = async () => {
     if (isLoading || !hasMore) return;
 
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
+      setError(null);
 
-    const response = await getTeachers(lastKey);
+      const response = await getTeachers(lastKey);
 
-    setTeachers(prev => [...prev, ...response.teachers]);
-    setLastKey(response.lastKey);
-    setHasMore(response.hasMore);
-
-    setIsLoading(false);
+      setTeachers(prev => [...prev, ...response.teachers]);
+      setLastKey(response.lastKey);
+      setHasMore(response.hasMore);
+    } catch {
+      setError('Failed to load teachers');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return {
     teachers,
-    loadMore: load,
-    hasMore,
     isLoading,
+    error,
+    loadMore,
+    hasMore,
   };
 };

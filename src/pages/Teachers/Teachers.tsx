@@ -1,4 +1,3 @@
-// src/pages/Teachers/Teachers.tsx
 import React from 'react';
 import styles from './Teachers.module.css';
 
@@ -19,7 +18,6 @@ export const Teachers: React.FC = () => {
         </p>
       </header>
 
-      {/* FILTER */}
       <div className={styles.filterWrapper}>
         <Filter
           filters={{ language: '', level: '', price: 0 }}
@@ -27,34 +25,29 @@ export const Teachers: React.FC = () => {
         />
       </div>
 
-      {/* INITIAL LOADING */}
       {isLoading && teachers.length === 0 && (
         <div className={styles.center}>
           <Loader size="large" text="Loading teachers..." />
         </div>
       )}
 
-      {/* ERROR */}
       {error && (
         <div className={styles.error}>
           <p>{error}</p>
-          <button onClick={() => window.location.reload()}>Retry</button>
+          <button onClick={loadMore}>Retry</button>
         </div>
       )}
 
-      {/* TEACHERS LIST */}
       <div className={styles.list}>
         {teachers.map(teacher => (
           <TeacherCard key={teacher.id} teacher={teacher} />
         ))}
       </div>
 
-      {/* EMPTY */}
       {!isLoading && !error && teachers.length === 0 && (
         <p className={styles.empty}>No teachers found</p>
       )}
 
-      {/* LOAD MORE */}
       {hasMore && (
         <div className={styles.loadMoreWrapper}>
           <button
