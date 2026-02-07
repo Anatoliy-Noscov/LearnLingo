@@ -33,7 +33,7 @@ function App() {
 
             <AuthModal
               isOpen={authMode !== null}
-              defaultMode={authMode || "login"}
+              initialMode={authMode || "login"}
               onClose={() => setAuthMode(null)}
             />
           </div>
